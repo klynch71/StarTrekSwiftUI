@@ -7,83 +7,72 @@
 
 import SwiftUI
 
-/*
- A view that displays the sectors of a quadrant in a Grid with gridlines as well as numerical column and row header labels
- */
+/// A view that displays the sectors of a quadrant in a Grid with gridlines as well as numerical column and row header labels
 struct ShortRangeSensorView: View {
-    @EnvironmentObject var model: AppState
-    //add 1 to sector columns for the row label
-    let columns = Array(repeating: GridItem(.flexible()), count: Location.SECTOR_COLS + 1)
-    let colLabels = [" "] + Array(1...Location.SECTOR_COLS).map {String($0)}
-    let rowLabels = Array(1...Location.SECTOR_ROWS).map {String($0)}
-    let indices = Array(0..<Quadrant.SECTORS_PER_QUADRENT)
+    @ObservedObject var appState: AppState
+    private let navViewModel: NavigationViewModel
+    
+    init(appState: AppState) {
+        self.appState = appState
+        self.navViewModel = NavigationViewModel(appState: appState)
+    }
     
     var body: some View {
-        GeometryReader { geo in
-            //fit the window
-            let cellWidth = geo.size.width / CGFloat(columns.count)
-            let cellHeight = geo.size.height /
-                (CGFloat(rowLabels.count) + 1)
-            
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 0) {
-                    //column headers
-                    ForEach(colLabels, id:\.self) {label in
-                        Text(label)
-                            .foregroundColor(Color.white)
-                    }.padding()
-                    
-                    //sector contents
-                    ForEach (indices, id:\.self) {index in
-                        if (index % Location.SECTOR_COLS == 0) {
-                            //row label
-                            Text(rowLabels[index / Location.SECTOR_COLS]).foregroundColor(Color.white)
-                        }
-                        //sector contents
-                        let imageName = getImageName(getSector(index))
-                        Image(imageName)
-                            .resizable()
-                                .scaledToFit()
-                                .frame(width: cellWidth, height: cellHeight)
-                                .border(Color.gray, width: 1)
+        NumberedGridWithLines(
+                     rows: Galaxy.quadrantRows,
+                     columns: Galaxy.quadrantCols,
+                     rowHeaderWidth: 25,
+                     columnHeaderHeight: 25
+                 ) { row, col in
+                     ObjectCellView(object: object(row: row, col: col))
+                         .onTapGesture {processTap(row: row, col: col, appState: appState)
+                         }
+                 }
+    }
+    
+    /*
+     return the sector for the given row and column
+     */
+    func getSector(row: Int, col: Int) -> Sector? {
+        let sectors = appState.enterprise.location.quadrant.sectors
+        //row and col are zero-based
+        let index = row * Galaxy.sectorCols + col
+        guard index >= 0 && index < sectors.count else { return nil }
+        
+        return sectors[index]
+    }
+    
+    /// Returns the object at the given row and column or nil if there is no object.
+    private func object(row: Int, col: Int) -> (any Locatable)? {
+        guard let sector = getSector(row: row, col: col) else {return nil}
+        
+        if appState.enterprise.location.sector == sector {
+            return appState.enterprise
+        }
 
-                    }
-                }
-            }.background(Color.black)
-        }
+        return appState.galaxyObjects.first (where: {$0.location.sector == sector})
     }
-    
+
     /*
-     return the sectors of the quadrant where the
-     Enterprise currently is
+     handle a tap in a sector by setting course and speed
+     to reach the sector and setting torpedo course to same
      */
-    func sectors() -> Array<Sector> {
-        return model.enterprise.location.quadrant!.sectors
-    }
-    
-    /*
-     return the sector of the quadrant for the
-     current index
-     */
-    func getSector(_ index: Int) -> Sector {
-        let quadrant = model.enterprise.location.quadrant!
-        return quadrant.sectors[index]
-    }
-    
-    /*
-     return an image for the Sector
-     */
-    func getImageName(_ sector: Sector) -> String {
-        if model.enterprise.location.sector == sector {
-            return model.enterprise.name
-        } else if let object = model.galaxyObjects.first (where: {$0.location.sector == sector}) {
-            return object.name;
-        }
-        return "EmptySpace";
+    func processTap(row: Int, col: Int, appState: AppState) {
+        guard let tappedSector = getSector(row: row, col: col) else {return}
+        
+        let destination = GalaxyLocation(sector: tappedSector)
+        let navData = appState.enterprise.location.navigate(to: destination)
+        
+        //set torpedo course
+        appState.updateEnterprise {$0.torpedoCourse = navData.course}
+        
+        //set enteprise course and speed
+        navViewModel.setCourseAndSpeed(navData: navData)
     }
 }
 
 #Preview {
-    ShortRangeSensorView()
+    ShortRangeSensorView(appState: AppState())
         .environmentObject(AppState())
 }
+

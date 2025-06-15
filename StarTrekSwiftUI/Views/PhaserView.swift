@@ -8,39 +8,50 @@
 import SwiftUI
 
 struct PhaserView: View {
-    @EnvironmentObject var model: AppState
-    @State private var phaserEnergy: Double = 0.0
+    @ObservedObject var appState: AppState
+    private let commandExecutor: CommandExecutor
+    
+    // Computed binding for phaserEnergy
+    private var phaserEnergyBinding: Binding<Int> {
+        Binding<Int>(
+            get: { appState.enterprise.phaserEnergy },
+            set: { newValue in
+                appState.updateEnterprise { $0.phaserEnergy = newValue }
+            }
+        )
+    }
+    
+    init(appState: AppState) {
+        self.appState = appState
+        self.commandExecutor = CommandExecutor(appState: appState)
+    }
     
     var body: some View {
         VStack {
-            Text("Phasers:")
-                .padding(.top)
-                .frame(alignment: .center)
-            Text(String(Int(phaserEnergy)))
-                .frame(alignment: .center)
-            VerticalSlider(
-                value: $phaserEnergy,
-                in: 0...model.enterprise.freeEnergy,
-                step: 1.0
+            //Control for setting Phaser energy
+            DrainSlider(
+                drain: phaserEnergyBinding,
+                totalResource: appState.enterprise.totalEnergy,
+                competingDrains: { [appState.enterprise.shieldEnergy] },
+                label: "Phasers"
             )
-            .frame(minWidth: 40, minHeight:200)
-            Button("Fire", action: fire)
+        
+            //fire button
+            Button("Fire", action: {fire(appState.enterprise.phaserEnergy, appState: appState)})
                 .background(Color.red)
                 .padding(.vertical)
-            
         }
     }
     
     /*
      fire Phasers
      */
-    func fire () {
-        
+    func fire (_ energy: Int, appState: AppState) {
+        commandExecutor.firePhasers(phaserEnergy: energy)
     }
 }
 
 #Preview {
-    PhaserView()
-        .environmentObject(AppState())
+    PhaserView(appState: AppState())
         .preferredColorScheme(.dark)
 }

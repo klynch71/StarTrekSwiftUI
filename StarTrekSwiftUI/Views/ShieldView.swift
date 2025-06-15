@@ -7,27 +7,35 @@
 
 import SwiftUI
 
+///The view for display Shield strength.
+///
 struct ShieldView: View {
-    @Binding var shields: Double
-    let maxRange: Double
+    @ObservedObject var appState: AppState
+    
+    // Computed binding for shieldEnergy
+    private var shieldEnergyBinding: Binding<Int> {
+        Binding<Int>(
+            get: { appState.enterprise.shieldEnergy },
+            set: { newValue in
+                appState.updateEnterprise { $0.shieldEnergy = newValue }
+            }
+        )
+    }
+    
+    init(appState: AppState) {
+        self.appState = appState
+    }
+    
     var body: some View {
         VStack {
-            Text("Shields:")
-                .padding(.top)
-                .frame(alignment: .center)
-            Text(String(Int(shields)))
-                .frame(alignment: .center)
-            VerticalSlider(
-                value: $shields,
-                in: 0...maxRange,
-                step: 1.0
+            //Control for setting Shield energy
+            DrainSlider(
+                drain: shieldEnergyBinding,
+                totalResource: appState.enterprise.totalEnergy,
+                competingDrains: { [appState.enterprise.phaserEnergy] },
+                label: "Shields"
             )
-            .frame(minWidth: 40, minHeight:200)
-            .padding(.bottom, 60)
         }
     }
 }
 
-#Preview {
-    ShieldView(shields: .constant(50), maxRange: 100)
-}

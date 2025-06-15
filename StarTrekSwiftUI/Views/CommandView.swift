@@ -8,11 +8,62 @@
 import SwiftUI
 
 struct CommandView: View {
+    @EnvironmentObject var appState: AppState
+    @Binding var selection: MainScreen
+    let commandExecutor: CommandExecutor
+    
+    /// Initializes the view with the app state and screen binding
+    /// - Parameters:
+    ///   - appState: The global application state
+    ///   - selection: Binding to the currently selected main screen
+    init(appState: AppState, selection: Binding<MainScreen>) {
+        self._selection = selection
+        self.commandExecutor = CommandExecutor(appState: appState)
+    }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            Spacer()
+            Button("Short Range Scan", action: shortRangeSensors)
+            Spacer()
+            Button("Long Range Scan", action: {longRangeSensors(appState: appState)})
+            Spacer()
+            Button("Damage Report", action: {damageReport()})
+            Spacer()
+            Button("Computer", action: {computer()})
+            Spacer()
+        }
+    }
+    
+    //Show the short range sensors view
+    func shortRangeSensors() {
+        commandExecutor.shortRangeSensors()
+        selection = .shortRangeSensors
+    }
+    
+    //Show the long range sensors view
+    func longRangeSensors(appState: AppState) {
+        commandExecutor.longRangeSensors()
+        selection = .longRangeSensors
+    }
+    
+    //Show the damage report view
+    func damageReport() {
+        commandExecutor.damageReport()
+        
+        selection = .damageReport
+    }
+    
+    //Show the computer view
+    func computer() {
+        commandExecutor.computer()
+        
+        selection = .computer
     }
 }
 
 #Preview {
-    CommandView()
+    CommandView(appState: AppState(), selection: .constant(.initial))
+        .environmentObject(AppState())
 }
+

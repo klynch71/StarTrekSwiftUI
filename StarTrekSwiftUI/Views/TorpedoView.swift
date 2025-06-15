@@ -1,5 +1,5 @@
 //
-//  TorpedoView2.swift
+//  TorpedoView.swift
 //  StarTrekSwiftUI
 //
 //  Created by Kevin Lynch on 5/29/25.
@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+///A single torpedo tube view used in the main TorpedoView
 struct TorpedoTubeView: View {
     let isOn: Bool
     
@@ -25,20 +26,35 @@ struct TorpedoTubeView: View {
     }
 }
 
+///The display for showing how many torpedoes remain, as well as firing a torepedo on a set course
+///
 struct TorpedoView: View {
-    @EnvironmentObject var appState: AppState
-    @State var course = Course(degrees: 0)
+    @ObservedObject var appState: AppState
+    private let commandExecutor: CommandExecutor
+    
+    // Computed binding for torpedoCourse
+    private var torpedoCourseBinding: Binding<Course> {
+        Binding<Course>(
+            get: { appState.enterprise.torpedoCourse },
+            set: { newValue in
+                appState.updateEnterprise { $0.torpedoCourse = newValue }
+            }
+        )
+    }
+    
+    init(appState: AppState) {
+        self.appState = appState
+        self.commandExecutor = CommandExecutor(appState: appState)
+    }
     
     var body: some View {
-        let viewModel = TorpedoViewModel(appState: appState)
-        
         GeometryReader {geo in
             VStack {
                 //Photon tubes
                 Spacer()
                 Text("Photon")
                 Text("Tubes")
-                ForEach((1...Enterprise.INITIAL_TORPEDOES).reversed(), id: \.self) { index in
+                ForEach((1...Enterprise.torpedoCapacity).reversed(), id: \.self) { index in
                     HStack {
                         Spacer()
                         TorpedoTubeView(isOn: index <= appState.enterprise.torpedoes)
@@ -48,29 +64,35 @@ struct TorpedoView: View {
                 
                 //Course stepper
                 Stepper("Course", onIncrement: {
-                    course = Course(degrees: course.degrees + 0.1)
+                    let newCourse = Course(degrees: appState.enterprise.torpedoCourse.degrees + 0.1)
+                    appState.updateEnterprise {$0.torpedoCourse = newCourse }
                 }, onDecrement: {
-                    course = Course(degrees: course.degrees - 0.1)
-                })
+                    let newCourse = Course(degrees: appState.enterprise.torpedoCourse.degrees - 0.1)
+                    appState.updateEnterprise {$0.torpedoCourse = newCourse }                })
                 
                 //Compass View
-                CourseView(course: $course)
+                CoursePicker(course: torpedoCourseBinding)
                     .frame(width: geo.size.width, height: geo.size.width)
                 
-                
                 //fire button
-                Button("Fire", action: {viewModel.fire(at: course)})
+                Button("Fire", action: {fireTorpedo(at: appState.enterprise.torpedoCourse)})
                     .background(Color.red)
                     .disabled(appState.enterprise.torpedoes <= 0)
                     .padding(.vertical)
             }
         }
     }
+    
+    /*
+     fire a photon torpedo
+     */
+    func fireTorpedo(at course: Course) {
+        commandExecutor.fireTorpedo(at: course)
+    }
 }
 
 #Preview {
-    TorpedoView()
+    TorpedoView(appState: AppState())
         .environmentObject(AppState())
         .preferredColorScheme(.dark)
-
 }

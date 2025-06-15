@@ -11,6 +11,8 @@ struct TorpedoDataView: View {
     @EnvironmentObject var appState: AppState
     
     var body: some View {
+        let quadrant = appState.enterprise.location.quadrant
+        let enemies = appState.objects(ofType: Klingon.self, in: quadrant)
         
         ZStack {
             //computer background
@@ -19,10 +21,8 @@ struct TorpedoDataView: View {
                 .opacity(0.2)
                 
             VStack {
-                let enemies = getEnemies()
-                let indices = Array(0..<enemies.count)
-                ForEach (indices, id:\.self) {index in
-                    Text(enemyWarning(enemies[index]))
+                ForEach(enemies) {enemy in
+                    Text(enemyWarning(enemy))
                         .font(.title)
                 }
             
@@ -35,28 +35,19 @@ struct TorpedoDataView: View {
     }
     
     /*
-     return an array of Sectors containing enemies
-     in the current quadrant
-     */
-    func getEnemies() -> [Locatable] {
-        let ourQuadrant = appState.enterprise.location.quadrant
-        let sectorObjects = appState.galaxyObjects.filter {$0.location.quadrant == ourQuadrant}
-        return sectorObjects.filter {$0 is Klingon}
-    }
-    
-    /*
      return text for the given enemy object
      */
-    func enemyWarning(_ enemy: Locatable) -> String {
-        guard let pos = enemy.location.gridPosition()else {
-            return "Computer Error: Unknown Enemy Position."
-        }
+    func enemyWarning(_ enemy: any Locatable) -> String {
+        let pos = enemy.location
+  
         let course = appState.enterprise.location.course(to: enemy.location)
         let distance = appState.enterprise.location.distance(to: enemy.location)
         
-        let s = "Direction: \(String(format: "%.1f", course.degrees)) Klingon at Sector (\(pos.sX),\(pos.sY)), distance: \(String(format: "%.1f", distance))"
+        let strSector = "(\(pos.sX),\(pos.sY))"
+        let strCourse = String(format: "%.1f", course.degrees)
+        let strDistance = String(format: "%.1f", distance)
         
-        return s
+        return "Klingon at sector \(strSector), course: \(strCourse), distance: \(strDistance)"
     }
 }
 

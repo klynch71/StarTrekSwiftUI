@@ -5,4 +5,15 @@
 //  Created by Kevin Lynch on 6/7/25.
 //
 
-import Foundation
+import SwiftUI
+
+extension Binding where Value == Int {
+    func clamped(to limit: @escaping () -> Int) -> Binding<Int> {
+        Binding<Int>(
+            get: { self.wrappedValue },
+            set: { newValue in
+                self.wrappedValue = Swift.min(Swift.max(0, newValue), Swift.max(0, limit()))
+            }
+        )
+    }
+}

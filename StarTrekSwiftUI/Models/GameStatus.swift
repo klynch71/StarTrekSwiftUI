@@ -7,21 +7,47 @@
 
 import Foundation
 
-/// Represents the current status of the game.
+/// Represents the current status of the game, including whether it is ongoing,
+/// won, or lost for various reasons.
 enum GameStatus: Equatable {
+    /// The game is currently in progress.
     case inProgress
+        
+    /// The player has won by destroying all Klingons.
     case wonAllKlingonsDestroyed
+        
+    /// The game is lost because the Enterprise has been destroyed.
     case lostEnterpriseDestroyed
+        
+    /// The game is lost because all Starbases have been destroyed.
     case lostAllStarbasesDestroyed
+        
+    /// The game is lost because the player ran out of time.
     case lostOutOfTime
     
-    /// Whether the game is over (won or lost).
+    /// Indicates whether the game has ended (either won or lost).
     var isGameOver: Bool {
         switch self {
         case .inProgress:
             return false
         default:
             return true
+        }
+    }
+    
+    /// A user-facing message describing the current game status.
+    var message: String {
+        switch self {
+        case .inProgress:
+            return "Game in progress"
+        case .wonAllKlingonsDestroyed:
+            return "Victory! All Klingons have been eliminated."
+        case .lostEnterpriseDestroyed:
+            return "Game Over. The Enterprise has been destroyed."
+        case .lostAllStarbasesDestroyed:
+            return "Game Over. All Starbases have been destroyed."
+        case .lostOutOfTime:
+            return "Game Over. You have run out of time."
         }
     }
 }

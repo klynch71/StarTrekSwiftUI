@@ -7,38 +7,27 @@
 
 import SwiftUI
 
-/*
- Scan adjacent sectors to where the Enterprise
- is currently located. 
- */
+ /// Scan adjacent sectors to where the Enterprise is currently located.
 struct LongRangeSensorView: View {
-    @EnvironmentObject var model: AppState
-    let columns = Array(repeating: GridItem(.flexible()), count: 3)
+    @ObservedObject var appState: AppState
+    @State var viewModel: LongRangeSensorViewModel
     
+    init(appState: AppState) {
+        self.appState = appState
+        self.viewModel = LongRangeSensorViewModel(appState: appState)
+    }
+
     var body: some View {
-        
-        GeometryReader { geometry in
-            //get the adjacent quadrants to the enterprise
-            let quadrants = Galaxy.adjacentQuadrants(to: model.enterprise.location)
-            let rows = quadrants.count / columns.count
-            let cellWidth = geometry.size.width  / CGFloat(columns.count)
-            let cellHeight = geometry.size.height / CGFloat(rows)
-            
-            LazyVGrid(columns: columns, spacing: 0) {
-                ForEach(quadrants.indices, id:\.self) { index in
-                    ZStack {
-                        QuadrantExplorerView(quadrant: quadrants[index])
-                            .font(.title)
-                            .frame(width: cellWidth, height: cellHeight)
-                    }.border(Color.white.opacity(0.5), width: 0.5)
+        GridWithLines(rows: 3, columns: 3, lineColor: .gray, lineWidth: 1) { row, col in
+            QuadrantExplorerView(quadrant: viewModel.quadrant(row: row, col:col))
+                .onTapGesture {
+                    viewModel.processTap(row: row, col: col)
                 }
-            }
-            
         }
     }
 }
 
 #Preview {
-    LongRangeSensorView()
+    LongRangeSensorView(appState: AppState())
         .environmentObject(AppState())
 }

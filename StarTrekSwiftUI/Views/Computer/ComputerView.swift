@@ -8,6 +8,14 @@
 import SwiftUI
 
 struct ComputerView: View {
+    let appState: AppState
+    let damageControl: DamageControl
+    
+    init(appState: AppState) {
+        self.appState = appState
+        self.damageControl = DamageControl(appState: appState)
+    }
+    
     var body: some View {
         CustomTabView(
             content: [
@@ -15,7 +23,13 @@ struct ComputerView: View {
                     title: "Galactic Record",
                     icon: "GalacticRecord",
                     view: AnyView (
-                        GalaticRecordView()
+                        ZStack {
+                            Image("Galaxy")
+                                .resizable()
+                                .opacity(0.3)
+                            
+                            GalaticRecordView()
+                        }
                     )
                 ),
                 (
@@ -33,10 +47,10 @@ struct ComputerView: View {
                     )
                 ),
                 (
-                    title: "StarBase Nav",
-                    icon: "StarBaseNav",
+                    title: "Starbase Nav",
+                    icon: "StarbaseNav",
                     view: AnyView (
-                        StarBaseNavView()
+                        StarbaseNavView()
                     )
                 ),
                 (
@@ -51,20 +65,26 @@ struct ComputerView: View {
                     icon: "Map",
                     view: AnyView(
                         ZStack {
-                            VStack {
-                                Image("Galaxy")
-                                    .resizable()
-                            }.opacity(0.3)
-
-                            GalaxyGridView()
+                            Image("Galaxy")
+                                .resizable()
+                                .opacity(0.3)
+                            
+                            GalaxyMapView()
                         }
                     )
                 )
-            ])
+            ],
+            onTabWillChange: { _ in
+                //every use of the computer induces a change for damage
+                if let message = damageControl.handleDamageOrRepair(system: .computer) {
+                    appState.log.append(message)
+                }
+                })
     }
 }
 
 
 #Preview {
-    ComputerView()
+    ComputerView(appState: AppState())
+    
 }

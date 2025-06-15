@@ -8,37 +8,22 @@
 import SwiftUI
 
 struct LogView: View {
-    let location = Location(x: 1, y: 2)
-    var body: some View {
-        VStack {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            Text(getText())
-        }
-        
-    }
+    @EnvironmentObject var appState: AppState
     
-    func getText() -> String {
- 
-        var loc1 = Location(x: 1, y: 1)
-        let course = Course(degrees: 0)
-        let distance = 1.0
-        
-        for _ in 0...10 {
-            let newLoc = loc1.offset(by: course, distance: distance)
-            var s = "?"
-            if let sector = newLoc.sector {
-                s = String(sector.id)
-            }
-            print("(\(newLoc.x), \(newLoc.y)) in Sector: \(s)")
-            loc1 = newLoc
+    var body: some View {
+        ZStack {
+            Color.black
+            
+            AutoScrollingView(lines: appState.log)
+                .multilineTextAlignment(.center)
+                .font(.system(.body, design: .monospaced))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
         }
-        
- 
-        
-        return ("Hello")
     }
 }
 
 #Preview {
     LogView()
+        .environmentObject(AppState())
 }

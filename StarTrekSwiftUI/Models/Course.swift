@@ -7,41 +7,52 @@
 
 import Foundation
 
-/*
- Reporesents a Course for the game which is a direction on a 360 degree circle.
- direction is given as a number from 1.0 (representing 0 degrees) to SEGMENTS + 1 which
- represents 360 degrees.  Thus, if SEGMENTS = 8, we have:
- 
-                          3
-                       4     2
-                      5       1
-                       6     8
-                          7
- */
-struct Course {
-    static let SEGMENTS = 8.0
-    let direction: Double
-    var radians: Double {return (self.direction - 1) / Course.SEGMENTS * 2 * Double.pi}
-    var degrees: Double {return self.radians * 180 / Double.pi}
+/// Represents a course (segmentDirection) in a 360° circle.
+/// The circle is divided into `segments` equal parts. A course is defined by a segment-based
+/// index from `1.0` (representing 0°) to `segments + 1` (which wraps back to 0°/1.0 again).
+///
+///                         3
+///                      4     2
+///                     5       1
+///                      6     8
+///                         7
+///
+/// A course can be initialized using a segment index, radians, or degrees.
+struct Course: Equatable, Hashable {
     
-    /*
-     init with directional number
-     */
+    /// The number of segments in the circle
+    static let segments = 8.0
+    
+    /// The size of a segment in radians
+    static var segmentSizeRadians: Double {
+        (2 * .pi) / segments
+    }
+    
+    /// The course direction as it pertains to the segments.
+    let segmentDirection: Double
+    
+    /// The course equivalent in radians
+    var radians: Double {return (segmentDirection - 1) * Course.segmentSizeRadians}
+    
+    /// The course equivalent in degrees
+    var degrees: Double {return radians * 180 / Double.pi}
+    
+    /// Initializes using a segment-based direction.
+    /// - Parameter direction: Segment index (1.0 to 8.0). Wraps around and normalizes if out of range.
     init(direction: Double) {
-        var normalizedDirection = direction.truncatingRemainder(dividingBy: (Course.SEGMENTS+1))
+        var normalizedDirection = direction.truncatingRemainder(dividingBy: (Course.segments + 1))
         if normalizedDirection < 0 {
-            normalizedDirection += Course.SEGMENTS+1
+            normalizedDirection += Course.segments + 1
         }
         if normalizedDirection == 0 {
             normalizedDirection = 1.0
         }
-        self.direction = normalizedDirection
+        self.segmentDirection = normalizedDirection
     }
     
     
-    /*
-     init with radians
-     */
+    /// Initializes using radians.
+    /// - Parameter radians: Radian angle, normalized and mapped to the nearest segment.
     init(radians: Double) {
         let twoPi = 2 * Double.pi
         var result = radians.truncatingRemainder(dividingBy: twoPi)
@@ -51,19 +62,17 @@ struct Course {
             result += twoPi
         }
         
-        // Scale radians to [1.0 to COURSE.SEGMENTS + 1)
-        let segmentSize = (2 * Double.pi) / Course.SEGMENTS
-        var value = (result / segmentSize) + 1.0
-        if (value == Course.SEGMENTS + 1) {
+        // Scale radians to (1.0 to COURSE.SEGMENTS + 1)
+        var value = (result / Course.segmentSizeRadians) + 1.0
+        if (value == Course.segments + 1) {
             value = 1.0
         }
 
-        self.direction = value
+        self.segmentDirection = value
     }
     
-    /*
-     init with degrees
-     */
+    /// Initializes using degrees.
+    /// - Parameter degrees: Degree angle, converted to radians then mapped to a segment.
     init(degrees: Double) {
         let radians = degrees * Double.pi / 180
         self.init(radians: radians)

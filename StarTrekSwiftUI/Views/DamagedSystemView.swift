@@ -8,11 +8,20 @@
 import SwiftUI
 
 struct DamagedSystemView: View {
+    let message: String
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Image("LCARS")
+                .resizable()
+                .opacity(0.2)
+            
+            Text(message)
+                .font(.title)
+        }
     }
 }
 
 #Preview {
-    DamagedSystemView()
+    DamagedSystemView(message: "Damaged")
+        .preferredColorScheme(.dark)
 }

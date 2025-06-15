@@ -25,12 +25,18 @@ struct ConditionView: View {
      */
     func getImageName() -> String {
         switch model.enterprise.condition {
-        case .docked: return "Docked"
+        case .docked:
+            audioPlayer.stop()
+            return "Docked"
         case .alert:
-            audioPlayer.play("redAlert.wav", loops: -1)
+           // audioPlayer.play("redAlert.wav", loops: -1)
             return "RedAlert"
-        case .caution: return "ConditionYellow"
-        case .green: return "ConditionGreen"
+        case .caution:
+            audioPlayer.stop()
+            return "ConditionYellow"
+        case .green:
+            audioPlayer.stop()
+            return "ConditionGreen"
         }
     }
 }

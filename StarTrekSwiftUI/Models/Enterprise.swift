@@ -6,41 +6,96 @@
 //
 
 import Foundation
+import Combine
 
-enum ShipCondition {
-    case green
-    case docked
-    case caution
-    case alert
+/// The condition of the USS Enterprise.
+enum ShipCondition: String, CaseIterable, Identifiable {
+    case green      // Fully operational
+    case docked     // Docked at a starbase
+    case caution    // Caution due to low energy or minor damage
+    case alert      // Red alert: immediate threat or heavy damage
+
+    var id: Self { self }
 }
 
-struct Enterprise: Locatable {
-    static let INITIAL_TORPEDOES: Int = 10
-    static let INITIAL_ENERGY: Double = 3000
-    var location: Location {
+/// Sensor system status.
+enum SensorStatus {
+    case shortRangeOn
+    case longRangeOn
+    case allOff
+}
+
+/// The USS Enterprise NCC-1701.
+struct Enterprise: Observable, Locatable {
+    
+    // MARK: - Constants
+    static let maxWarp = 8.0
+    static let torpedoCapacity: Int = 10
+    static let maxEnergy: Int = 3000
+    
+    // MARK: - Identity & Location
+    
+    /// Unique ID for this ship instance.
+    let id: UUID
+    
+    /// Current location in the galaxy.
+    var location: GalaxyLocation
+    
+    // MARK: - Status
+    var condition: ShipCondition = .green
+    var sensorStatus: SensorStatus = .allOff
+    var damage = SystemDamage() //track system damage
+    var exploredSpace = Set<Quadrant>()  //quadrants that have been explored
+    
+    // MARK: - Energy & Weapons
+    
+    /// Total energy including shields and weapons.
+    var totalEnergy:Int  = Enterprise.maxEnergy
+    
+    /// Energy not allocated to shields or phasers.
+    var freeEnergy: Int { max(0, totalEnergy - shieldEnergy - phaserEnergy) }
+    
+    var shieldEnergy:Int = 0
+    var phaserEnergy: Int = 0
+    
+    /// Number of photon torpedoes.
+    var torpedoes: Int = Enterprise.torpedoCapacity
+    
+    /// MARK: - Navigation
+    
+    /// Warp factor (0.0 to maxWarp).
+    var warpFactor: Double = 0.1 {
         didSet {
-            //we should be in the Galaxy!
-            if let quadrant = location.quadrant {
-                exploredSpace.insert(quadrant)
+            let clamped = min(max(0, warpFactor), Enterprise.maxWarp)
+            if clamped != warpFactor {      // prevent infinite recursion on @Published var
+                warpFactor = clamped
             }
         }
     }
-    var name: String {return "Enterprise"}
-    var condition: ShipCondition = .green
+    var navigationCourse: Course = Course(degrees: 0)
+    var torpedoCourse: Course = Course(degrees: 0)
     
-    var freeEnergy: Double {return self.energy - self.shields}
-    var energy:Double  = INITIAL_ENERGY
-    var shields:Double = 0
-    var torpedoes: Int = INITIAL_TORPEDOES
-    var phaserDamage: Int = 0
-    var engineDamage: Int = 0
-    var exploredSpace = Set<Quadrant>()
+    // MARK: - Locatable
+
+    /// Display name of the ship.
+    var name: String { "Enterprise" }
     
-    init(location: Location) {
+    /// Creates a new Enterprise at the given location.
+    /// - Parameter location: Starting position in the galaxy.
+    init(id: UUID, location: GalaxyLocation) {
+        self.id = id
         self.location = location
-        //we should be in the Galaxy!
-        if let quadrant = self.location.quadrant {
-            exploredSpace.insert(quadrant)
-        }
+    }
+
+    // MARK: - Equatable
+    
+    static func == (lhs: Enterprise, rhs: Enterprise) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+    // MARK: - Hashable
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

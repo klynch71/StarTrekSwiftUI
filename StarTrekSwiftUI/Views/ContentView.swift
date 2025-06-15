@@ -7,38 +7,48 @@
 
 import SwiftUI
 
-enum WindowType {
+///Window to display in the main viewing area.
+enum MainScreen {
     case initial
     case navigation
     case shortRangeSensors
     case longRangeSensors
-    case log
+    case damageReport
     case computer
 }
 
 struct ContentView: View {
-    @EnvironmentObject var model: AppState
-    @State var activeWindow: WindowType = .initial
+    @EnvironmentObject var appState: AppState
+    @State var activeMainScreen: MainScreen = .initial
     
     var body: some View {
         VStack {
-            StatusView()
-                .frame(height: 20)
-            HStack {
-                NavigationView()
-                    .frame(width: 80)
-                MainView(selection: activeWindow)
-                ShieldView(shields: $model.enterprise.shields, maxRange: model.enterprise.energy)
-                    .frame(width: 80)
-                TorpedoView()
-                    .frame(width: 80)
-                PhaserView()
-                    .frame(width: 80)
-                    .accentColor(Color.red)
+            if appState.gameStatus.isGameOver {
+                GameOverView()
+            } else {
+                StatusBarView(appState: appState)
+                    .frame(height: 20)
+                HStack {
+                    NavigationView(appState: appState)
+                        .frame(width: 80)
+                    VerticalSplitView(topHeightRatio: 0.75) {
+                        MainView(selection: activeMainScreen)
+                    } bottom: {
+                        LogView()
+                    }
+                    ShieldView(appState: appState)
+                        .padding(.bottom, 60)
+                        .frame(width: 80)
+                    TorpedoView(appState: appState)
+                        .frame(width: 80)
+                    PhaserView(appState: appState)
+                        .frame(width: 80)
+                        .accentColor(Color.red)
+                }
+                CommandView(appState: appState, selection: $activeMainScreen)
+                    .padding(.top)
+                
             }
-            MessageView(message: $model.message)
-                .padding(.bottom)
-            ControlView(selection: $activeWindow)
         }
         .padding()
     }

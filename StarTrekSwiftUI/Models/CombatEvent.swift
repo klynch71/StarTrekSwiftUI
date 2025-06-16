@@ -24,7 +24,6 @@ enum AttackType {
     case torpedo
 }
 
-
 /// Represents the outcome of a combat interaction.
 struct CombatEvent {
     /// The attacking object.

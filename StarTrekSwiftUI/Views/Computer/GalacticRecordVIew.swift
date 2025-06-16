@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct GalaticRecordView: View {
+/// A view that displays the galactic record grid, showing explored quadrants
+/// using the QuadrantExplorerView. Unexplored or out-of-bounds quadrants are shown as empty*
+struct GalacticRecordView: View {
     @EnvironmentObject var appState: AppState
     
     var body: some View {
@@ -17,15 +19,13 @@ struct GalaticRecordView: View {
                      rowHeaderWidth: 25,
                      columnHeaderHeight: 25
                  ) { row, col in
-                     QuadrantExplorerView(quadrant: getQuadrant(row: row, col: col))
+                     QuadrantExplorerView(quadrant: quadrantAt(row: row, col: col))
                  }
     }
     
-    /*
-     return the quadrant for the given row, col or nil
-     if not explored yet (or out of bounds)
-     */
-    private func getQuadrant(row: Int, col: Int) -> Quadrant? {
+    /// Returns the quadrant at the specified position if it has been explored,
+    /// or nil if it's out of bounds or not yet explored.
+    private func quadrantAt(row: Int, col: Int) -> Quadrant? {
         let index = row * Galaxy.quadrantCols + col
         guard index >= 0 && index < Galaxy.quadrants.count else {
             return nil
@@ -37,6 +37,6 @@ struct GalaticRecordView: View {
 }
 
 #Preview {
-    GalaticRecordView()
+    GalacticRecordView()
         .environmentObject(AppState())
 }

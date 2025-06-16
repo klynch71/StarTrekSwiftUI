@@ -24,7 +24,7 @@ struct GameSetup {
     static func reset(_ appState: AppState) {
         appState.galaxyObjects.removeAll()
         appState.log.removeAll()
-        appState.gameStatus = .inProgress
+        appState.gameStatus = .starting
         var rng: any RandomNumberGenerator = SystemRandomNumberGenerator()
         
         // Set the stardate randomly between 2000 and 3900 in increments of 100

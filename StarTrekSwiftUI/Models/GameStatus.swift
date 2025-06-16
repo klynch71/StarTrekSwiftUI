@@ -10,6 +10,9 @@ import Foundation
 /// Represents the current status of the game, including whether it is ongoing,
 /// won, or lost for various reasons.
 enum GameStatus: Equatable {
+    /// The game is just starting
+    case starting
+    
     /// The game is currently in progress.
     case inProgress
         
@@ -28,7 +31,7 @@ enum GameStatus: Equatable {
     /// Indicates whether the game has ended (either won or lost).
     var isGameOver: Bool {
         switch self {
-        case .inProgress:
+        case .starting, .inProgress:
             return false
         default:
             return true
@@ -38,8 +41,10 @@ enum GameStatus: Equatable {
     /// A user-facing message describing the current game status.
     var message: String {
         switch self {
+        case .starting:
+            return "Ready to begin."
         case .inProgress:
-            return "Game in progress"
+            return "Game in progress."
         case .wonAllKlingonsDestroyed:
             return "Victory! All Klingons have been eliminated."
         case .lostEnterpriseDestroyed:

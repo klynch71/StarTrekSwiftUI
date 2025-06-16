@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-/// A view that displays the sectors of a quadrant in a Grid with gridlines as well as numerical column and row header labels
+/// A view that displays the sectors of a quadrant in a grid with gridlines,
+/// along with numerical column and row header labels.
 struct ShortRangeSensorView: View {
     @ObservedObject var appState: AppState
     private let navViewModel: NavigationViewModel
@@ -24,27 +25,22 @@ struct ShortRangeSensorView: View {
                      rowHeaderWidth: 25,
                      columnHeaderHeight: 25
                  ) { row, col in
-                     ObjectCellView(object: object(row: row, col: col))
-                         .onTapGesture {processTap(row: row, col: col, appState: appState)
+                     ObjectCellView(object: objectAt(row: row, col: col))
+                         .onTapGesture {handleTap(row: row, col: col)
                          }
                  }
     }
     
-    /*
-     return the sector for the given row and column
-     */
-    func getSector(row: Int, col: Int) -> Sector? {
+    /// Returns the sector at the given grid coordinates.
+    private func sectorAt(row: Int, col: Int) -> Sector? {
         let sectors = appState.enterprise.location.quadrant.sectors
-        //row and col are zero-based
         let index = row * Galaxy.sectorCols + col
-        guard index >= 0 && index < sectors.count else { return nil }
-        
-        return sectors[index]
+        return sectors[safe: index]
     }
     
-    /// Returns the object at the given row and column or nil if there is no object.
-    private func object(row: Int, col: Int) -> (any Locatable)? {
-        guard let sector = getSector(row: row, col: col) else {return nil}
+    /// Returns the object located at the specified sector, or nil if empty.
+    private func objectAt(row: Int, col: Int) -> (any Locatable)? {
+        guard let sector = sectorAt(row: row, col: col) else {return nil}
         
         if appState.enterprise.location.sector == sector {
             return appState.enterprise
@@ -53,26 +49,21 @@ struct ShortRangeSensorView: View {
         return appState.galaxyObjects.first (where: {$0.location.sector == sector})
     }
 
-    /*
-     handle a tap in a sector by setting course and speed
-     to reach the sector and setting torpedo course to same
-     */
-    func processTap(row: Int, col: Int, appState: AppState) {
-        guard let tappedSector = getSector(row: row, col: col) else {return}
+    /// Handles a tap gesture on a sector by calculating a navigation course
+    /// and updating the enterprise's course, speed, and torpedo heading.
+    func handleTap(row: Int, col: Int) {
+        guard let tappedSector = sectorAt(row: row, col: col) else {return}
         
         let destination = GalaxyLocation(sector: tappedSector)
         let navData = appState.enterprise.location.navigate(to: destination)
         
-        //set torpedo course
         appState.updateEnterprise {$0.torpedoCourse = navData.course}
         
-        //set enteprise course and speed
         navViewModel.setCourseAndSpeed(navData: navData)
     }
 }
 
 #Preview {
     ShortRangeSensorView(appState: AppState())
-        .environmentObject(AppState())
 }
 

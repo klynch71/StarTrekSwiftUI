@@ -47,12 +47,15 @@ struct ContentView: View {
                 }
                 CommandView(appState: appState, selection: $activeMainScreen)
                     .padding(.top)
-                
             }
         }
         .padding()
+        .onChange(of: appState.gameStatus) { _, newStatus in
+            if newStatus == .starting {
+                activeMainScreen = .initial
+            }
+        }
     }
-
 }
 
 #Preview {

@@ -19,9 +19,9 @@ struct LongRangeSensorView: View {
 
     var body: some View {
         GridWithLines(rows: 3, columns: 3, lineColor: .gray, lineWidth: 1) { row, col in
-            QuadrantExplorerView(quadrant: viewModel.quadrant(row: row, col:col))
+            QuadrantExplorerView(quadrant: viewModel.quadrantAt(row: row, col:col))
                 .onTapGesture {
-                    viewModel.processTap(row: row, col: col)
+                    viewModel.handleTap(row: row, col: col)
                 }
         }
     }

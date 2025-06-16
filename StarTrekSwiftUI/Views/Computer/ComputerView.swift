@@ -28,7 +28,7 @@ struct ComputerView: View {
                                 .resizable()
                                 .opacity(0.3)
                             
-                            GalaticRecordView()
+                            GalacticRecordView()
                         }
                     )
                 ),

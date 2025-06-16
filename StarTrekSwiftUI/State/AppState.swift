@@ -35,7 +35,7 @@ final class AppState: ObservableObject {
     }
     
     /// A flag indicating whether the game has ended, either by winning or losing.
-    @Published var gameStatus: GameStatus = .inProgress;
+    @Published var gameStatus: GameStatus = .inProgress
 
     // MARK: - UI and Feedback
     

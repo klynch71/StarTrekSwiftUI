@@ -20,8 +20,12 @@ struct DamageControl {
     /// - Returns; a user friendly stinrg or nil if nothing happened.
     func handleDamageOrRepair(system: ShipSystem? = nil) -> String? {
         if appState.enterprise.condition == .docked {
-            appState.updateEnterprise {$0.damage.repairAll()}
-            return "All systems have been fully repaired while docked."
+            //if we have any damaged ssytems while docked, fix them.
+            if !appState.enterprise.damage.isFullyOperational {
+                appState.updateEnterprise {$0.damage.repairAll()}
+                return "All systems have been fully repaired while docked."
+            }
+            return nil
         }
         
         if appState.enterprise.damage.isFullyOperational {
@@ -58,8 +62,8 @@ struct DamageControl {
     ///
     /// Repairs only one system at a time, prioritizing the first damaged system in the damage list.
     ///
-    /// - Returns: The fully repaired `system message` if repair completed this cycle, otherwise `nil`.
-    func repairDamage() -> String? {
+    /// - Returns: The fully  repaired `system message` if repair completed this cycle, otherwise `nil`.
+    private func repairDamage() -> String? {
         guard let system = appState.enterprise.damage.damagedSystems.first else {
             return nil
         }

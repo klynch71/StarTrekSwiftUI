@@ -9,8 +9,8 @@
 import SwiftUI
 import Combine
 
-/// ViewModel for LongRangeSensorView.
-/// Handles loading and navigation logic for 3x3 quadrant grid.
+/// ViewModel managing quadrant data and navigation logic for the LongRangeSensorView.
+/// Maintains a 3x3 grid of adjacent quadrants and handles tap-based navigation.
 class LongRangeSensorViewModel: ObservableObject {
     /// Adjacent quadrants surrounding the Enterprise (3x3 grid)
     @Published var adjacentQuadrants: [Quadrant?] = []
@@ -25,34 +25,17 @@ class LongRangeSensorViewModel: ObservableObject {
         self.loadAdjacentQuadrants()
         self.subscribeToQuadrantChanges()
     }
-
-     private func subscribeToQuadrantChanges() {
-         AppNotificationCenter.shared.quadrantDataDidChangePublisher
-             .sink { [weak self] in
-                 self?.loadAdjacentQuadrants()
-             }
-             .store(in: &cancellables)
-     }
-
-    /// Load adjacent quadrants from current enterprise location
-    func loadAdjacentQuadrants() {
-        print("loading quadrants...")
-        self.adjacentQuadrants = appState.adjacentQuadrants()
-    }
-
-    /// Convert a grid coordinate to flat array index
-    func getQuadrantIndex(row: Int, col: Int) -> Int {
-        return col + row * 3
-    }
     
-    func quadrant(row: Int, col: Int) -> Quadrant? {
-        let index = getQuadrantIndex(row: row, col: col)
+    /// Return the quadrant at the row, col index or nil if none exists
+    func quadrantAt(row: Int, col: Int) -> Quadrant? {
+        let index = quadrantIndexAt(row: row, col: col)
+        guard index >= 0 && index < adjacentQuadrants.count else { return nil }
         return adjacentQuadrants[index]
     }
 
-    /// Process user tap on a specific quadrant
-    func processTap(row: Int, col: Int) {
-        let index = getQuadrantIndex(row: row, col: col)
+    /// Handles user tap on a quadrant by calculating target location and initiating navigation.
+    func handleTap(row: Int, col: Int) {
+        let index = quadrantIndexAt(row: row, col: col)
         guard let quadrant = adjacentQuadrants[index] else {return}
 
         // Calculate target sector in center of selected quadrant
@@ -64,5 +47,23 @@ class LongRangeSensorViewModel: ObservableObject {
         // Determine navigation data and send to navigation system
         let navData = appState.enterprise.location.navigate(to: targetLocation)
         navViewModel.setCourseAndSpeed(navData: navData)
+    }
+    
+    private func subscribeToQuadrantChanges() {
+        AppNotificationCenter.shared.quadrantDataDidChangePublisher
+            .sink { [weak self] in
+                self?.loadAdjacentQuadrants()
+            }
+            .store(in: &cancellables)
+    }
+    
+    /// Load adjacent quadrants from current enterprise location
+    private func loadAdjacentQuadrants() {
+        self.adjacentQuadrants = appState.adjacentQuadrants()
+    }
+
+    /// Convert a grid coordinate to flat array index
+    private func quadrantIndexAt(row: Int, col: Int) -> Int {
+        return col + row * 3
     }
 }

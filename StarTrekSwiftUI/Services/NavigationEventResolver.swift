@@ -35,7 +35,7 @@ struct NavigationEventResolver {
         let targetWarp = appState.enterprise.warpFactor
         
         switch event {
-        case .insufficientEnergy(_, _):
+        case .enginesDamaged, .insufficientEnergy(_, _):
             return  //No movement or energy
             
         case .movedSuccessfully(let newLocation, let energy):

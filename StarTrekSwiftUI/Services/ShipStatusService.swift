@@ -62,9 +62,10 @@ struct ShipStatusService {
     /*
      refit the enterprise
      */
-    private func refit() {
+    func refit() {
         appState.updateEnterprise {$0.totalEnergy = Enterprise.maxEnergy}
         appState.updateEnterprise {$0.shieldEnergy = 0}
+        appState.updateEnterprise {$0.phaserEnergy = 0}
         appState.updateEnterprise {$0.torpedoes = Enterprise.torpedoCapacity}
     }
 }

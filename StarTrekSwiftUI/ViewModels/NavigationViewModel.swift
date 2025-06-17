@@ -20,6 +20,12 @@ struct NavigationViewModel {
      set Enterprise course and speed
      */
     func setCourseAndSpeed(navData: NavigationData) {
+        //computer must be oeprational for auto navigation and targeting
+        guard !appState.enterprise.damage.isDamaged(.computer) else {
+            appState.log.append("Computer damaged.  Auto navigation and targeting unavailable.")
+            return
+        }
+        
         appState.updateEnterprise {$0.navigationCourse = navData.course}
         
         //set speed based on distance.  The NavData distance is in sectors
@@ -55,7 +61,7 @@ struct NavigationViewModel {
      a helper function to resolve Navigation
      */
     private func resolveNavigation() -> [String] {
-        let event = NavigationEngine(appState: appState).evaluateMove()
+        let event = NavigationEvaluator(appState: appState).evaluateMove()
         return  NavigationEventResolver(appState: appState).resolve(event)
     }
     
@@ -63,7 +69,9 @@ struct NavigationViewModel {
      a helper functon to resolve Klingons attacking after moving in the same quadrant
      */
     private func resolveCombat() -> [String] {
-        let combatEvents = CombatEngine(appState: appState).klingonsAttack()
-        return CombatEventResolver(appState: appState).resolve(combatEvents)
+        let combatEvents = CombatEvaluator(appState: appState).klingonsAttack()
+        let resolvedEvents = CombatResolver(appState: appState).resolve(combatEvents)
+        let combatFormatter = CombatEventFormatter()
+        return resolvedEvents.map { combatFormatter.message(for: $0) }
     }
 }

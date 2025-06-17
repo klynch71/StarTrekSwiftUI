@@ -49,6 +49,7 @@ class LongRangeSensorViewModel: ObservableObject {
         navViewModel.setCourseAndSpeed(navData: navData)
     }
     
+    ///listen for notifications regarding quadrant changes
     private func subscribeToQuadrantChanges() {
         AppNotificationCenter.shared.quadrantDataDidChangePublisher
             .sink { [weak self] in

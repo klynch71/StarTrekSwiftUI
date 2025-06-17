@@ -29,6 +29,7 @@ enum SensorStatus {
 struct Enterprise: Observable, Locatable {
     
     // MARK: - Constants
+    
     static let maxWarp = 8.0
     static let torpedoCapacity: Int = 10
     static let maxEnergy: Int = 3000
@@ -42,9 +43,10 @@ struct Enterprise: Observable, Locatable {
     var location: GalaxyLocation
     
     // MARK: - Status
+    
     var condition: ShipCondition = .green
     var sensorStatus: SensorStatus = .allOff
-    var damage = SystemDamage() //track system damage
+    var damage = ShipSystemDamage() //track system damage
     var exploredSpace = Set<Quadrant>()  //quadrants that have been explored
     
     // MARK: - Energy & Weapons
@@ -61,7 +63,7 @@ struct Enterprise: Observable, Locatable {
     /// Number of photon torpedoes.
     var torpedoes: Int = Enterprise.torpedoCapacity
     
-    /// MARK: - Navigation
+    // MARK: - Navigation
     
     /// Warp factor (0.0 to maxWarp).
     var warpFactor: Double = 0.1 {
@@ -76,7 +78,7 @@ struct Enterprise: Observable, Locatable {
     var torpedoCourse: Course = Course(degrees: 0)
     
     // MARK: - Locatable
-
+    
     /// Display name of the ship.
     var name: String { "Enterprise" }
     
@@ -97,5 +99,9 @@ struct Enterprise: Observable, Locatable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+    
+    func refit() {
+        
     }
 }

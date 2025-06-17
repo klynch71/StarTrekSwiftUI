@@ -12,6 +12,9 @@ import Foundation
 /// Each case captures a specific outcome, along with any relevant data such as the final location or energy cost.
 enum NavigationEvent {
     
+    ///  Warp engines are damaged
+    case enginesDamaged
+    
     /// Movement failed due to insufficient energy.
     /// - Parameters:
     ///   - requiredEnergy: The energy that would have been needed to complete the move.

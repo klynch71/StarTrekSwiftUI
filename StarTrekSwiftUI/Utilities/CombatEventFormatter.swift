@@ -18,7 +18,7 @@ struct CombatEventFormatter {
         let targetName = event.target?.name ?? "Unknown target"
         let targetLocation = event.target.map { LocationFormatter.localSector($0.location) } ?? ""
         
-        switch event.result {
+        switch event.effect {
             
         ///No enemies available to target.
         case .noTargets:
@@ -29,6 +29,9 @@ struct CombatEventFormatter {
             return event.attackType == .torpedo
                 ? "Enterprise has no photon torpedoes."
                 : "Phaser energy is too low for a successful attack."
+            
+        case .systemDamaged(let system):
+            return "System damaged: \(system.displayName).  Repairs are underway"
             
         /// A weapon was fired, but the effect is still to be resolved.
         case .fired:

@@ -19,7 +19,7 @@ struct KlingonWeaponSystem: WeaponSystem {
     /// with some randomness applied. The attack energy expended by the Klingon is also randomized slightly.
     ///
     /// - Returns: An array containing a single `CombatEvent` representing the result of the attack.
-    func fire() -> [CombatEvent] {
+    func fire() -> [UnresolvedCombatEvent] {
         //energy delivered is based on distance and some randomness
         let distanceDilution = max(1.0, klingon.location.distance(to: appState.enterprise.location))
         let impactEnergy = Int((Double(klingon.energy) / distanceDilution) * (2 + Double.random(in: 0..<1)))
@@ -28,14 +28,14 @@ struct KlingonWeaponSystem: WeaponSystem {
         let attackEnergy = max(0, Int(Double(klingon.energy) / (3 + Double.random(in: 0..<1))))
         
         //determine results
-        var result = CombatResult.hit
+        var effect = CombatEffect.hit
         if appState.enterprise.condition == .docked {
-            result = .protected
+            effect = .protected
         } else if appState.enterprise.shieldEnergy < impactEnergy {
-            result = .destroyed
+            effect = .destroyed
         }
         
-        let event = CombatEvent(attacker: klingon, attackType: .phasers, attackEnergy: attackEnergy, target: appState.enterprise, impactEnergy: impactEnergy, result: result)
+        let event = UnresolvedCombatEvent(attacker: klingon, attackType: .phasers, attackEnergy: attackEnergy, target: appState.enterprise, impactEnergy: impactEnergy, effect: effect)
         
         return [event]
     }

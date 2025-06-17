@@ -9,17 +9,17 @@ import Foundation
 
 /// Responsible for handling combat logic between the Enterprise and Klingon ships.
 ///
-/// The `CombatEngine` produces `CombatEvent` results but does **not** directly mutate `AppState`.
+/// The `CombatEvaluator` produces `CombatEvent` results but does **not** directly mutate `AppState`.
 /// Actual application state updates (e.g., damage application) are handled externally by a resolver.
-struct CombatEngine {
+struct CombatEvaluator {
     
     let appState: AppState
     
     /// Fires phasers at all Klingon ships in the current quadrant.
     ///
     /// - Parameter phaserEnergy: The total energy to use for phaser attacks.
-    /// - Returns: An array of `CombatEvent` results, including Klingon counterattacks.
-    func firePhasers(phaserEnergy: Int) -> [CombatEvent] {
+    /// - Returns: An array of `UnresolvedCombatEvent` results, including Klingon counterattacks.
+    func firePhasers(phaserEnergy: Int) -> [UnresolvedCombatEvent] {
         let phaserSystem = PhaserSystem(appState: appState)
         let events = phaserSystem.fire(phaserEnergy: phaserEnergy)
         return events + klingonsAttack(after: events)
@@ -28,8 +28,8 @@ struct CombatEngine {
     /// Fires a single photon torpedo along a given course.
     ///
     /// - Parameter course: The direction/course to fire the torpedo.
-    /// - Returns: An array of `CombatEvent` results, including Klingon counterattacks.
-    func fireTorpedo(course: Course) -> [CombatEvent] {
+    /// - Returns: An array of `UnresolvedCombatEvent` results, including Klingon counterattacks.
+    func fireTorpedo(course: Course) -> [UnresolvedCombatEvent] {
         let torpedoSystem = TorpedoSystem(appState: appState)
         let events = torpedoSystem.fire(at: course)
         return events + klingonsAttack(after: events)
@@ -37,16 +37,16 @@ struct CombatEngine {
     
     /// Causes all Klingons in the Enterprise's quadrant to attack.
     ///
-    /// - Returns: An array of `CombatEvent` results representing Klingon attacks.
-    func klingonsAttack() -> [CombatEvent] {
+    /// - Returns: An array of `UnresolvedCombatEvent` results representing Klingon attacks.
+    func klingonsAttack() -> [UnresolvedCombatEvent] {
         return klingonsAttack(after: [])
     }
     
     /// Causes Klingon counterattacks after the Enterprise's initial attack.
     ///
-    /// - Parameter events: A list of prior CombatEvent`s (e.g., phaser or torpedo fire).
+    /// - Parameter events: A list of prior UnresolvedCombatEvent`s (e.g., phaser or torpedo fire).
     /// - Returns: An array of `CombatEvents representing Klingon retaliation.
-    private func klingonsAttack(after events: [CombatEvent]) -> [CombatEvent] {
+    private func klingonsAttack(after events: [UnresolvedCombatEvent]) -> [UnresolvedCombatEvent] {
         // Filter out Klingons that were already destroyed in previous events
         let klingons = remainingKlingons(after: events)
         
@@ -60,14 +60,14 @@ struct CombatEngine {
     ///
     /// - Parameter events: A list of prior `CombatEvent`s (some may contain destroyed Klingons).
     /// - Returns: A list of surviving `Klingon` instances.
-    private func remainingKlingons(after events: [CombatEvent]) -> [Klingon] {
+    private func remainingKlingons(after events: [UnresolvedCombatEvent]) -> [Klingon] {
         let allKlingons = appState.objects(ofType: Klingon.self,
                                            in: appState.enterprise.location.quadrant)
         
         // Extract Klingons that were destroyed in earlier combat events
         let destroyedKlingons = Set(
             events
-                .filter { $0.result == .destroyed }
+                .filter { $0.effect == .destroyed }
                 .compactMap { $0.target as? Klingon }
         )
 

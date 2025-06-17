@@ -16,7 +16,12 @@ struct PhaserSystem: WeaponSystem {
     ///
     /// - Parameter phaserEnergy: The amount of energy to be distributed across targets.
     /// - Returns: An array of `CombatEvent`s representing the firing result.
-    func fire(phaserEnergy: Int) -> [CombatEvent] {
+    func fire(phaserEnergy: Int) -> [UnresolvedCombatEvent] {
+        
+        // Check for damaged weapon
+        guard !appState.enterprise.damage.isDamaged(.phaserControl) else {
+            return weaponDamagedEvent(attacker: appState.enterprise, attackType: .phasers)
+        }
         
         // Check for insufficient energy provided
         guard phaserEnergy > 0 else {
@@ -29,10 +34,10 @@ struct PhaserSystem: WeaponSystem {
             return noTargetsEvent(attackType: .phasers)
         }
         
-        var combatEvents: [CombatEvent] = []
+        var events: [UnresolvedCombatEvent] = []
         
         // Log the firing action
-        combatEvents.append(firedEvent(attacker: appState.enterprise, attackType: .phasers))
+        events.append(firedEvent(attacker: appState.enterprise, attackType: .phasers))
         
         // Divide energy evenly among targets
         let energyPerEnemy = phaserEnergy / klingons.count
@@ -43,13 +48,14 @@ struct PhaserSystem: WeaponSystem {
             
             // Calculate damage with distance falloff and some randomness
             let impactEnergy = Int((Double(energyPerEnemy) / distance) * (2 + Double.random(in: 0..<1)))
+            let newEnergy = klingon.energy - impactEnergy
             
             // Determine hypothetical outcome based on current Klingon energy
-            let result: CombatResult = klingon.energy <= 0 ? .destroyed : .hit
-            let event = CombatEvent(attacker: appState.enterprise, attackType: .phasers, attackEnergy: energyPerEnemy, target: klingon, impactEnergy: impactEnergy, result: result)
-            combatEvents.append(event)
+            let effect: CombatEffect = newEnergy <= 0 ? .destroyed : .hit
+            let event = UnresolvedCombatEvent(attacker: appState.enterprise, attackType: .phasers, attackEnergy: energyPerEnemy, target: klingon, impactEnergy: impactEnergy, effect: effect)
+            events.append(event)
         }
         
-        return combatEvents
+        return events
     }
 }

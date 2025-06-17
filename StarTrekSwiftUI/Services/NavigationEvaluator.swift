@@ -1,20 +1,20 @@
 //
-//  NavigationEngine.swift
+//  NavigationEvaluator.swift
 //  StarTrekSwiftUI
 //
-//  Created by Kevin Lynch on 6/10/25.
+//  Created by Kevin Lynch on 6/17/25.
 //
 
 import Foundation
 
-/// The `NavigationEngine` evaluates the result of the Enterprise's navigation move.
+/// The `NavigationEvaluator` evaluates the result of the Enterprise's navigation move.
 /// It **does not modify any state** but instead returns a `NavigationEvent` describing the outcome.
 ///
-/// This engine calculates the path of movement based on the current course and warp factor.
+/// This evaluator calculates the path of movement based on the current course and warp factor.
 /// It performs incremental checks for collisions, galaxy boundaries, and docking opportunities.
 ///
 /// - Note: A sector is 1 unit wide and a WarpFactor of 0.1 corresponds to moving 1 sector.
-struct NavigationEngine {
+struct NavigationEvaluator {
     
     /// Reference to the global application state.
     let appState: AppState
@@ -33,6 +33,10 @@ struct NavigationEngine {
     /// - `.dockedAtStarbase` if the Enterprise docks at a starbase (either by collision or adjacency).
     /// - `.movedSuccessfully` if the move completes without incident.
     func evaluateMove() -> NavigationEvent {
+        
+        guard !appState.enterprise.damage.isDamaged(.engines) else {
+            return .enginesDamaged
+        }
   
         let entLoc = appState.enterprise.location
         let distance = appState.enterprise.warpFactor * 10

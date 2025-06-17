@@ -1,5 +1,5 @@
 //
-//  SystemDamage.swift
+//  ShipSystemDamage.swift
 //  StarTrekSwiftUI
 //
 //  Created by Kevin Lynch on 6/11/25.
@@ -8,7 +8,7 @@
 import Foundation
 
 /// Tracks the damage levels of the ship's key systems.
-struct SystemDamage: Equatable, Hashable {
+struct ShipSystemDamage: Equatable, Hashable {
     
     /// Damage level for the engines (0 means undamaged).
    var engines: Int = 0
@@ -23,13 +23,13 @@ struct SystemDamage: Equatable, Hashable {
    var shieldControl: Int = 0
    
     /// Damage level for the photon torpedo system.
-   var photons: Int = 0
+   var torpedoControl: Int = 0
    
     /// Damage level for the computer.
    var computer: Int = 0
    
     /// Damage level for the phasers.
-   var phasers: Int = 0
+   var phaserControl: Int = 0
    
     /// Returns `true` if all ship systems are fully operational (i.e., have zero damage)
    var isFullyOperational: Bool {
@@ -60,17 +60,17 @@ struct SystemDamage: Equatable, Hashable {
 // MARK: - Subscript Access to System Damage Values
 
 /// Enables array-like access to system damage values using `SystemDamage[.phasers]`, etc.
-extension SystemDamage {
+extension ShipSystemDamage {
     
    /// Maps each `ShipSystem` to its corresponding writable key path in the struct.
-   private static let systemKeyPaths: [ShipSystem: WritableKeyPath<SystemDamage, Int>] = [
+   private static let systemKeyPaths: [ShipSystem: WritableKeyPath<ShipSystemDamage, Int>] = [
        .engines: \.engines,
        .shortRangeScanner: \.shortRangeScanner,
        .longRangeScanner: \.longRangeScanner,
        .shieldControl: \.shieldControl,
-       .photons: \.photons,
+       .torpedoControl: \.torpedoControl,
        .computer: \.computer,
-       .phasers: \.phasers
+       .phaserControl: \.phaserControl
    ]
    
     /// Allows getting or setting a specific system's damage value using subscript syntax.

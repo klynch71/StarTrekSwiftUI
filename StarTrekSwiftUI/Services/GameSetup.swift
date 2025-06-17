@@ -24,7 +24,7 @@ struct GameSetup {
     static func reset(_ appState: AppState) {
         appState.galaxyObjects.removeAll()
         appState.log.removeAll()
-        appState.gameStatus = .starting
+        appState.gameStatus = .inProgress
         var rng: any RandomNumberGenerator = SystemRandomNumberGenerator()
         
         // Set the stardate randomly between 2000 and 3900 in increments of 100
@@ -35,8 +35,10 @@ struct GameSetup {
         appState.endDate = appState.starDate + Double(gameDuration)
         
         // Place the enterprise in a random location within the Galaxy
+        // and refit it.
         let randomLocation = GalaxyLocation.random()
         appState.updateEnterprise {$0.location = randomLocation}
+        ShipStatusService(appState: appState).refit()
         
         // Populate each quadrant with galaxy objects excluding Enterprise's sector
         for quadrant in Galaxy.quadrants {

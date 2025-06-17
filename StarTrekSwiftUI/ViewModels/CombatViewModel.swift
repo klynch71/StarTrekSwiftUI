@@ -11,13 +11,15 @@ import Foundation
 /// The CombatViewModel handles firing Phasers and Photon Torpedoes.
 struct CombatViewModel {
     let appState: AppState
-    let combatEngine: CombatEngine
-    let combatResolver: CombatEventResolver
+    let combatEvaluator: CombatEvaluator
+    let combatResolver: CombatResolver
+    let combatFormatter: CombatEventFormatter
     
     init(appState: AppState) {
         self.appState = appState
-        self.combatEngine = CombatEngine(appState: appState)
-        self.combatResolver = CombatEventResolver(appState: appState)
+        self.combatEvaluator = CombatEvaluator(appState: appState)
+        self.combatResolver = CombatResolver(appState: appState)
+        self.combatFormatter = CombatEventFormatter()
     }
     
     /*
@@ -25,15 +27,17 @@ struct CombatViewModel {
      Rreturn an array of resulting log messages
      */
     func firePhasers(phaserEnergy: Int) -> [String] {
-        let combatEvents = combatEngine.firePhasers(phaserEnergy: phaserEnergy)
-        return combatResolver.resolve(combatEvents)
+        let combatEvents = combatEvaluator.firePhasers(phaserEnergy: phaserEnergy)
+        let resolvedEvents = combatResolver.resolve(combatEvents)
+        return resolvedEvents.map { combatFormatter.message(for: $0) }
     }
     
     /*
      fire a photon torpedo and handle the results
      */
     func fireTorpedo(at course: Course) -> [String] {
-        let combatEvents = combatEngine.fireTorpedo(course: course)
-        return combatResolver.resolve(combatEvents)
+        let combatEvents = combatEvaluator.fireTorpedo(course: course)
+        let resolvedEvents = combatResolver.resolve(combatEvents)
+        return resolvedEvents.map { combatFormatter.message(for: $0) }
     }
 }

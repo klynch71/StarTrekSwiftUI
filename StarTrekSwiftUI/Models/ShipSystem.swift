@@ -6,7 +6,7 @@
 //
 
 /// Represents a system on the ship that can be damaged or repaired.
-enum ShipSystem: CaseIterable {
+enum ShipSystem: CaseIterable, Equatable {
     /// Controls ship movement.
     case engines
     
@@ -20,13 +20,13 @@ enum ShipSystem: CaseIterable {
     case shieldControl
     
     /// Controls photon torpedo system.
-    case photons
+    case torpedoControl
     
     /// Central computer for navigation and operations.
     case computer
     
     /// Phaser weapon control system.
-    case phasers
+    case phaserControl
 }
 
 /// an extension to provide user friendly names for each system
@@ -38,9 +38,9 @@ extension ShipSystem {
         case .shortRangeScanner: return "Short Range Scanner"
         case .longRangeScanner: return "Long Range Scanner"
         case .shieldControl: return "Shield Control"
-        case .photons: return "Photon Torpedo System"
+        case .torpedoControl: return "Photon Torpedo System"
         case .computer: return "Computer"
-        case .phasers: return "Phaser Control"
+        case .phaserControl: return "Phaser Control"
         }
     }
 }

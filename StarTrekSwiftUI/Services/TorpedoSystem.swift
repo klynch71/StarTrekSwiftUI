@@ -21,8 +21,13 @@ struct TorpedoSystem: WeaponSystem {
     /// - Parameter course: The `Course` along which to fire the torpedo.
     /// - Returns: An array of `CombatEvent` objects representing the result of the attack,
     ///   including events for firing, hitting, missing, or absorbing by a star.
-    func fire(at course: Course) -> [CombatEvent] {
+    func fire(at course: Course) -> [UnresolvedCombatEvent] {
         let enterprise = appState.enterprise
+        
+        // Check for damaged weapon
+        guard !appState.enterprise.damage.isDamaged(.torpedoControl) else {
+            return weaponDamagedEvent(attacker: appState.enterprise, attackType: .torpedo)
+        }
 
         // Check for available torpedoes
         guard enterprise.torpedoes > 0 else {
@@ -35,10 +40,10 @@ struct TorpedoSystem: WeaponSystem {
             return noTargetsEvent(attackType: .torpedo)
         }
 
-        var combatEvents: [CombatEvent] = []
+        var events: [UnresolvedCombatEvent] = []
         
         // Add firing event to indicate launch
-        combatEvents.append(firedEvent(attacker: enterprise, attackType: .torpedo))
+        events.append(firedEvent(attacker: enterprise, attackType: .torpedo))
 
         var hitSomething = false
         var torpedoLocation = enterprise.location
@@ -70,16 +75,16 @@ struct TorpedoSystem: WeaponSystem {
                 if torpedoLocation.sector != lastSector {
                     // Check for a hit at new sector
                     if let hitObject = appState.object(in: torpedoLocation.sector) {
-                        let result: CombatResult = (hitObject is Star) ? .absorbed : .destroyed
-                        let event = CombatEvent(
+                        let effect: CombatEffect = (hitObject is Star) ? .absorbed : .destroyed
+                        let event = UnresolvedCombatEvent(
                             attacker: enterprise,
                             attackType: .torpedo,
                             attackEnergy: 0,
                             target: hitObject,
                             impactEnergy: 1,
-                            result: result
+                            effect: effect
                         )
-                        combatEvents.append(event)
+                        events.append(event)
                         hitSomething = true
                         break
                     }
@@ -92,17 +97,17 @@ struct TorpedoSystem: WeaponSystem {
 
         // If nothing was hit, report a miss
         if !hitSomething {
-            let miss = CombatEvent(
+            let miss = UnresolvedCombatEvent(
                 attacker: enterprise,
                 attackType: .torpedo,
                 attackEnergy: 0,
                 target: nil,
                 impactEnergy: 0,
-                result: .missed
+                effect: .missed
             )
-            combatEvents.append(miss)
+            events.append(miss)
         }
 
-        return combatEvents
+        return events
     }
 }

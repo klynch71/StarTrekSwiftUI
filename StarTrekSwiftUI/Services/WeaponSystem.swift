@@ -27,16 +27,16 @@ extension WeaponSystem {
     /// Returns a `.noTargets` combat event with the Enterprise as the attacker.
     ///
     /// - Parameter attackType: The type of attack that failed due to no targets.
-    /// - Returns: An array containing a single `.noTargets` `CombatEvent`.
-    func noTargetsEvent(attackType: AttackType) -> [CombatEvent] {
+    /// - Returns: An array containing a single `.noTargets` `UnresolvedCombatEvent`.
+    func noTargetsEvent(attackType: AttackType) -> [UnresolvedCombatEvent] {
         return [
-            CombatEvent(
+            UnresolvedCombatEvent(
                 attacker: appState.enterprise,
                 attackType: attackType,
                 attackEnergy: 0,
                 target: nil,
                 impactEnergy: 0,
-                result: .noTargets
+                effect: .noTargets
             )
         ]
     }
@@ -47,14 +47,14 @@ extension WeaponSystem {
     ///   - attacker: The entity that initiated the attack.
     ///   - attackType: The type of weapon used in the attack.
     /// - Returns: A `CombatEvent` representing the firing action.
-    func firedEvent(attacker: any Locatable, attackType: AttackType) -> CombatEvent {
-        return CombatEvent(
+    func firedEvent(attacker: any Locatable, attackType: AttackType) -> UnresolvedCombatEvent {
+        return UnresolvedCombatEvent(
             attacker: attacker,
             attackType: attackType,
             attackEnergy: 0,
             target: nil,
             impactEnergy: 0,
-            result: .fired
+            effect: .fired
         )
     }
     
@@ -64,15 +64,35 @@ extension WeaponSystem {
     ///   - attacker: The entity attempting to fire a weapon without ammunition.
     ///   - attackType: The type of weapon that lacked ammunition.
     /// - Returns: An array containing a single `.noAmmo` `CombatEvent`.
-    func noAmmoEvent(attacker: any Locatable, attackType: AttackType) -> [CombatEvent] {
-        return [CombatEvent(
+    func noAmmoEvent(attacker: any Locatable, attackType: AttackType) -> [UnresolvedCombatEvent] {
+        return [UnresolvedCombatEvent(
             attacker: attacker,
             attackType: attackType,
             attackEnergy: 0,
             target: nil,
             impactEnergy: 0,
-            result: .noAmmo
+            effect: .noAmmo
         )
+        ]
+    }
+    
+    /// Returns a `.weaponDamaged` combat event for a given attacker and weapon type.
+    ///
+    /// - Parameters:
+    ///   - attacker: The entity that initiated the attack.
+    ///   - attackType: The type of weapon used in the attack.
+    /// - Returns: A `CombatEvent` representing the firing action.
+    func weaponDamagedEvent(attacker: any Locatable, attackType: AttackType) -> [UnresolvedCombatEvent] {
+        return [UnresolvedCombatEvent(
+            attacker: attacker,
+            attackType: attackType,
+            attackEnergy: 0,
+            target: nil,
+            impactEnergy: 0,
+            effect: (attackType == .torpedo)
+                ? .systemDamaged(.torpedoControl)
+                : .systemDamaged(.phaserControl)
+            )
         ]
     }
 }

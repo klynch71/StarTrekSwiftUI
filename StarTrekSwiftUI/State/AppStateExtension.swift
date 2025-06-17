@@ -115,12 +115,14 @@ extension AppState {
         }
     }
     
-    /// Replace one Locatable with another.  The new object shoudl have the same id as the object it
+    /// Replace one Locatable with another.  The new object should have the same id as the object it
     /// is replacing.
     /// - Parameter newObject: The object to replace the existing object with the same id.
     func replaceLocatable(with newObject: some Locatable) {
         if let index = galaxyObjects.firstIndex(where: { $0.id == newObject.id }) {
-            galaxyObjects[index] = newObject
+            var copy = galaxyObjects
+            copy[index] = newObject
+            galaxyObjects = copy // This triggers the view update
         } else {
             print("⚠️ No locatable found with id \(newObject.id)")
         }

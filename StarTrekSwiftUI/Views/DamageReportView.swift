@@ -44,11 +44,11 @@ struct DamageReportView: View {
             return "Long range snesors"
         case .shieldControl:
             return "Shield control"
-        case .photons:
+        case .torpedoControl:
             return "Photon torpedoes"
         case .computer:
             return "Computer"
-        case .phasers:
+        case .phaserControl:
             return "Phasers"
         }
     }

@@ -18,6 +18,9 @@ struct NavigationEventFormatter {
     func message(for event: NavigationEvent) -> String? {
         
         switch event {
+        case .enginesDamaged:
+            return "Engines are damaged.  Repairs are underway."
+            
         case .movedSuccessfully(_, _):
             // No message needed for successful movement
             return nil

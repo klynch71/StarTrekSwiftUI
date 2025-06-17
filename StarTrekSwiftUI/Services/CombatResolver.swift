@@ -7,56 +7,55 @@
 
 import Foundation
 
-/// Resolves CombatEvents by updating the AppState accordingly.
-struct CombatEventResolver {
+/// Resolves UnresolvedCombatEvents by updating the AppState accordingly.
+struct CombatResolver {
     let appState: AppState
-    let formatter = CombatEventFormatter()
     
-    /// Processes an array of CombatEvents by updating AppState and returning user-facing messages.
+    /// Processes an array of UnresolvedCombatEvents by updating AppState and returning user-facing messages.
     ///
-    /// - Parameter events: Array of CombatEvents to resolve.
-    /// - Returns: Array of formatted messages describing the combat outcomes.
-    func resolve(_ events: [CombatEvent]) -> [String] {
-        var messages: [String] = []
+    /// - Parameter events: Array of UnresolvedCombatEvents to resolve.
+    /// - Returns: Array of ResolvedCombatEvents
+    func resolve(_ events: [UnresolvedCombatEvent]) -> [CombatEvent] {
+        var resolvedEvents: [CombatEvent] = []
         
         for event in events {
-            updateAppState(for: event)
-            messages.append(formatter.message(for: event))
+            let resolvedEvent = updateAppState(for: event)
+            resolvedEvents.append(resolvedEvent)
         }
         
-        ///if a command is run while docked, time advances
-        TimeService(appState: appState).advanceIfDocked()
-        
-        return messages
+        return resolvedEvents
     }
     
-    /// Updates the game state according to a single CombatEvent.
+    /// Updates the game state according to a single UnresolvedCombatEvent.
     ///
-    /// - Parameter combatEvent: The CombatEvent to process.
-    private func updateAppState(for combatEvent: CombatEvent) {
+    /// - Parameter combatEvent: The UnresolvedCombatEvent to process.
+    private func updateAppState(for combatEvent: UnresolvedCombatEvent) -> CombatEvent {
         
         // Handle attack from a Klingon ship
         if let klingon = combatEvent.attacker as? Klingon {
-            resolveKlingonAttack(klingon: klingon, for: combatEvent)
+            return resolveKlingonAttack(klingon: klingon, for: combatEvent)
             
         // Handle attack from the Enterprise
         } else if let enterprise = combatEvent.attacker as? Enterprise {
-            resolveEnterpriseAttack(enterprise: enterprise, for: combatEvent)
+            return resolveEnterpriseAttack(enterprise: enterprise, for: combatEvent)
         }
+        
+        return CombatEvent(attacker: combatEvent.attacker, attackType: combatEvent.attackType, target: combatEvent.target, effect: combatEvent.effect)
     }
     
     /// Resolves the effects of a Klingon attack on the Enterprise.
     /// - Parameters:
     ///   - klingon: The attacking Klingon ship.
     ///   - combatEvent: The combat event representing the attack.
-    private func resolveKlingonAttack(klingon: Klingon, for combatEvent: CombatEvent) {
+    /// - Returns: the resolution of the combat
+    private func resolveKlingonAttack(klingon: Klingon, for combatEvent: UnresolvedCombatEvent) -> CombatEvent {
         // Deplete Klingon energy by the attack energy used
         let newEnergy = klingon.energy - combatEvent.attackEnergy
         let newKlingon = klingon.withEnergy(newEnergy)
         appState.replaceLocatable(with: newKlingon)
         
-        switch combatEvent.result {
-        case .noTargets, .noAmmo, .fired, .protected, .missed, .absorbed:
+        switch combatEvent.effect {
+        case .noTargets, .noAmmo, .systemDamaged(_), .fired, .protected, .missed, .absorbed:
             // No damage or effect on Enterprise
             break
             
@@ -73,19 +72,22 @@ struct CombatEventResolver {
             appState.updateEnterprise {$0.totalEnergy = 0}
             appState.gameStatus = .lostEnterpriseDestroyed
         }
+
+        return CombatEvent(attacker: newKlingon, attackType: combatEvent.attackType, target: appState.enterprise, effect: combatEvent.effect)
     }
     
     /// Resolves the effects of an Enterprise attack on a target (typically Klingon).
     /// - Parameters:
     ///   - enterprise: The attacking Enterprise.
     ///   - combatEvent: The combat event representing the attack.
-    private func resolveEnterpriseAttack(enterprise: Enterprise, for combatEvent: CombatEvent) {
+    /// - Returns: the resolution of the combat
+    private func resolveEnterpriseAttack(enterprise: Enterprise, for combatEvent: UnresolvedCombatEvent) -> CombatEvent {
         
         // Deduct ammunition or energy based on attack type and outcome
-        if combatEvent.attackType == .torpedo && combatEvent.result != .fired {
+        if combatEvent.attackType == .torpedo && combatEvent.effect != .fired {
             let torpedoCount = max(0, enterprise.torpedoes - 1)
             appState.updateEnterprise {$0.torpedoes = torpedoCount}
-        } else if combatEvent.attackType == .phasers && combatEvent.result != .fired {
+        } else if combatEvent.attackType == .phasers && combatEvent.effect != .fired {
             let newTotalEnergy = max(0, appState.enterprise.totalEnergy - combatEvent.attackEnergy)
             appState.updateEnterprise {$0.totalEnergy = newTotalEnergy}
             appState.updateEnterprise {$0.phaserEnergy = 0}
@@ -93,14 +95,19 @@ struct CombatEventResolver {
         
         // Handle damage or destruction of targeted Klingon ship
         if let klingon = combatEvent.target as? Klingon {
-            if combatEvent.result == .destroyed {
+            // Deplete Klingon energy by the attack energy used
+            let newEnergy = klingon.energy - combatEvent.impactEnergy
+            let newKlingon = klingon.withEnergy(newEnergy)
+            
+            if combatEvent.effect == .destroyed {
                 appState.galaxyObjects.removeAll { $0.id == klingon.id }
-            } else if combatEvent.result == .hit {
-                // Deplete Klingon energy by the attack energy used
-                let newEnergy = klingon.energy - combatEvent.impactEnergy
-                let newKlingon = klingon.withEnergy(newEnergy)
+            } else if combatEvent.effect == .hit {
                 appState.replaceLocatable(with: newKlingon)
             }
+            
+            return CombatEvent(attacker: appState.enterprise, attackType: combatEvent.attackType, target: newKlingon, effect: combatEvent.effect)
         }
+        
+        return CombatEvent(attacker: appState.enterprise, attackType: combatEvent.attackType, target: nil, effect: combatEvent.effect)
     }
 }

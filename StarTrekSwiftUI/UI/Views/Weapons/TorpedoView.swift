@@ -82,9 +82,7 @@ struct TorpedoView: View {
         }
     }
     
-    /*
-     fire a photon torpedo
-     */
+    // fire a photon torpedo at the given course
     func fireTorpedo(at course: Course) {
         commandExecutor.fireTorpedo(at: course)
     }

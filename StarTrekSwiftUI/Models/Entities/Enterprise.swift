@@ -33,6 +33,7 @@ struct Enterprise: Observable, Locatable {
     static let maxWarp = 8.0
     static let torpedoCapacity: Int = 10
     static let maxEnergy: Int = 3000
+    static let lowEnergy: Int = 200
     
     // MARK: - Identity & Location
     
@@ -68,9 +69,9 @@ struct Enterprise: Observable, Locatable {
     /// Warp factor (0.0 to maxWarp).
     var warpFactor: Double = 0.1 {
         didSet {
-            let clamped = min(max(0, warpFactor), Enterprise.maxWarp)
-            if clamped != warpFactor {      // prevent infinite recursion on @Published var
-                warpFactor = clamped
+            let clamped = warpFactor.clamped(to: 0...Enterprise.maxWarp)
+            if clamped != warpFactor {
+                warpFactor = clamped  // Will not recurse infinitely due to valu check
             }
         }
     }

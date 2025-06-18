@@ -9,9 +9,11 @@ import SwiftUI
 
 struct GameOverView: View {
     @EnvironmentObject var appState: AppState
+    private var imageName: String {
+        appState.gameStatus == .lostEnterpriseDestroyed ? "EnterpriseDestroyed" : "EnterpriseLarge"
+    }
     
     var body: some View {
-        let imageName = appState.gameStatus == .lostEnterpriseDestroyed ? "EnterpriseDestroyed" : "EnterpriseLarge"
         
         VerticalSplitView(topHeightRatio: 0.75) {
             ZStack {
@@ -28,7 +30,10 @@ struct GameOverView: View {
                         .font(.title)
                     Spacer()
                     Button("Reset", action: resetGame)
-                        .padding(.vertical)
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(8)
+                        .foregroundColor(.white)
                 }
             }
 
@@ -38,9 +43,7 @@ struct GameOverView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    /*
-     star a new game
-     */
+    /// Start a new game.
     func resetGame() {
         appState.resetGame()
     }

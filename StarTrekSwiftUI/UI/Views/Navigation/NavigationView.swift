@@ -51,15 +51,15 @@ struct NavigationView: View {
                     .padding(.top)
                 Text("Factor")
                 
-                //Warp fine-tune stepper
+                // Fine-tune warp factor using a stepper.
                 Stepper(String(format: "%.1f", warpFactorBinding.wrappedValue), value: warpFactorBinding, in: 0...Enterprise.maxWarp, step: 0.1)
                         
-                //vertical Slider
+                // Vertical Slider for setting warp factor.
                 VerticalSlider(value: warpFactorBinding, in: 0...Enterprise.maxWarp, step: 0.1)
                 
                 Spacer()
                 
-                //Course stepper
+                // Fine-tune navigation course using a stepper.
                 Stepper("Course", onIncrement: {
                     let newCourse = Course(degrees: appState.enterprise.navigationCourse.degrees + 0.1)
                     appState.updateEnterprise {$0.navigationCourse = newCourse }
@@ -68,7 +68,7 @@ struct NavigationView: View {
                     appState.updateEnterprise {$0.navigationCourse = newCourse }
                 })
                 
-                //Course viewer
+                //  control for setting navigation course.
                 CoursePicker(course: navigationCourseBinding)
                     .frame(width: geo.size.width,
                            height: geo.size.width)
@@ -79,10 +79,8 @@ struct NavigationView: View {
         }
     }
     
-    /*
-     engage warp engines
-     */
-    func engage() {
+    /// Engage warp engines using the current course and warp factor.
+    private func engage() {
         commandExecutor.navigate()
     }
 }

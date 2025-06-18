@@ -35,7 +35,6 @@ struct GameSetup {
         appState.endDate = appState.starDate + Double(gameDuration)
         
         // Place the enterprise in a random location within the Galaxy
-        // and refit it.
         let randomLocation = GalaxyLocation.random()
         appState.updateEnterprise {$0.location = randomLocation}
         ShipStatusService(appState: appState).refit()

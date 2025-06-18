@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+///a View with a LCARS background that displays a system damaged message.
 struct DamagedSystemView: View {
     let message: String
     var body: some View {

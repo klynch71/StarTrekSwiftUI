@@ -7,13 +7,10 @@
 
 import SwiftUI
 
-/*
- A view for displaying text, like a log, that will automatically scroll to show the most recently
- added text the bottom
- */
+/// A vertically scrolling view that displays an array of strings (such as a log),
+/// automatically scrolling to the most recent line at the bottom when new lines are added.
 struct AutoScrollingView: View {
     let lines: [String]
-    
     private let lineSpacing: CGFloat = 4
 
     var body: some View {
@@ -29,11 +26,11 @@ struct AutoScrollingView: View {
                 .padding(.horizontal)
             }
             .onChange(of: lines.count) { oldCount, newCount in
-                if newCount > 0 {
+                guard newCount > 0 else { return }
+                    // Smoothly scroll to the latest line when new content is added
                     withAnimation(.easeOut(duration: 0.25)) {
                         proxy.scrollTo(newCount - 1, anchor: .bottom)
                     }
-                }
             }
         }
     }

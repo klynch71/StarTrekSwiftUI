@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// Displays targeting data for Klingons in the current quadrant, including their position,
+/// distance, and firing course. Shows a message if no enemies are detected.
 struct TorpedoDataView: View {
     @EnvironmentObject var appState: AppState
     
@@ -15,7 +17,7 @@ struct TorpedoDataView: View {
         let enemies = appState.objects(ofType: Klingon.self, in: quadrant)
         
         ZStack {
-            //computer background
+            // Subtle LCARS-style background
             Image("LCARS")
                 .resizable()
                 .opacity(0.2)
@@ -26,7 +28,7 @@ struct TorpedoDataView: View {
                         .font(.title)
                 }
             
-                if enemies.count == 0 {
+                if enemies.isEmpty {
                     Text("No enemies detected in current quadrant, sir.")
                         .font(.title)
                 }
@@ -34,9 +36,8 @@ struct TorpedoDataView: View {
         }
     }
     
-    /*
-     return text for the given enemy object
-     */
+    /// Returns a formatted targeting string for a Klingon.
+    /// Includes sector coordinates, course (degrees), and distance.
     func enemyWarning(_ enemy: any Locatable) -> String {
         let pos = enemy.location
   

@@ -8,13 +8,16 @@
 import Foundation
 
 
-/// The CombatViewModel handles firing Phasers and Photon Torpedoes.
+/// The CombatViewModel is responsible for coordinating combat actions
+/// including phaser attacks and photon torpedo launches. It delegates evaluation,
+/// resolution, and formatting of combat outcomes.
 struct CombatViewModel {
     let appState: AppState
     let combatEvaluator: CombatEvaluator
     let combatResolver: CombatResolver
     let combatFormatter: CombatEventFormatter
     
+    /// Initializes the combat system with dependencies tied to the current game state.
     init(appState: AppState) {
         self.appState = appState
         self.combatEvaluator = CombatEvaluator(appState: appState)
@@ -22,19 +25,26 @@ struct CombatViewModel {
         self.combatFormatter = CombatEventFormatter()
     }
     
-    /*
-     fire phasers at all enemies in the quadrant. Enemies that survive will fire back.
-     Rreturn an array of resulting log messages
-     */
+    /// Fires phasers at all enemy ships in the current quadrant.
+    ///
+    /// Phaser energy is distributed across all enemies.
+    /// Any surviving enemies may retaliate as part of the resolved combat events.
+    ///
+    /// - Parameter phaserEnergy: The total energy allocated to the phaser attack.
+    /// - Returns: An array of log messages describing the results of the attack and retaliation.
     func firePhasers(phaserEnergy: Int) -> [String] {
         let combatEvents = combatEvaluator.firePhasers(phaserEnergy: phaserEnergy)
         let resolvedEvents = combatResolver.resolve(combatEvents)
         return resolvedEvents.map { combatFormatter.message(for: $0) }
     }
     
-    /*
-     fire a photon torpedo and handle the results
-     */
+    /// Fires a photon torpedo along a specified course.
+    ///
+    /// The torpedo travels until it hits an object or misses entirely.
+    /// The outcome (hit, miss, destruction, retaliation) is evaluated and formatted.
+    ///
+    /// - Parameter course: The directional course to fire the torpedo.
+    /// - Returns: An array of log messages describing the torpedo's effect.
     func fireTorpedo(at course: Course) -> [String] {
         let combatEvents = combatEvaluator.fireTorpedo(course: course)
         let resolvedEvents = combatResolver.resolve(combatEvents)

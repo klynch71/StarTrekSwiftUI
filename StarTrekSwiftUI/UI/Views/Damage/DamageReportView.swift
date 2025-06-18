@@ -7,33 +7,30 @@
 
 import SwiftUI
 
-/*
- Display state of damaged systems
- */
+/// Displays the state of damaged systems aboard the Enterprise.
 struct DamageReportView: View {
     @EnvironmentObject var appState: AppState
     
     var body: some View {
+        let damagedSystems = appState.enterprise.damage.damagedSystems
+        
         VStack {
-            let damagedSystems = appState.enterprise.damage.damagedSystems
-            
             //display the damage systems
             ForEach(damagedSystems, id: \.self) { system in
                 let damageLevel = appState.enterprise.damage[system]
 
                 Text("\(getPrefix(system)) damage level: \(damageLevel)")
+                    .monospacedDigit()
             }
             
-            if damagedSystems.count == 0 {
+            if damagedSystems.isEmpty {
                 Text("All systems are operational.")
                     .font(.title)
             }
         }
     }
     
-    /*
-     return text for the given system
-     */
+    /// Returns a user-friendly name for the given ship system.
     func getPrefix(_ system: ShipSystem) ->String {
         switch (system) {
         case .engines:
@@ -41,7 +38,7 @@ struct DamageReportView: View {
         case .shortRangeScanner:
             return "Short range sensors"
         case .longRangeScanner:
-            return "Long range snesors"
+            return "Long range sensors"
         case .shieldControl:
             return "Shield control"
         case .torpedoControl:

@@ -76,9 +76,7 @@ struct NumberedGridWithLines<Content: View>: View {
         } //GeometryReader
     }
 
-    /*
-     a helper to get a headerCell View
-     */
+    /// return a headerCell View with the given text
     private func headerCell(_ text: String, width: CGFloat, height: CGFloat) -> some View {
         ZStack {
             Rectangle()

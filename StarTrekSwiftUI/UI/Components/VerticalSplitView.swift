@@ -7,15 +7,18 @@
 
 import SwiftUI
 
-/*
- A split screen view where the user can drag a bar to change the percentage of top view vs bottom view
- */
+/// A resizable vertical split view where users can drag a handle to adjust
+/// the ratio between a top and bottom view.
+///
+/// - Note: Top and bottom views are provided via `@ViewBuilder` closures.
+/// - The drag handle includes a larger hit area for easier interaction.
+/// - On macOS, the cursor changes to `resizeUpDown` when hovering over the handle.
 struct VerticalSplitView<Top: View, Bottom: View>: View {
     @GestureState private var dragOffset: CGFloat = 0
     @State private var topHeightRatio: CGFloat
 
-    let top: Top
-    let bottom: Bottom
+    let top: Top        // top view content
+    let bottom: Bottom  // bottom view content
 
     init(topHeightRatio: CGFloat = 0.5,
          @ViewBuilder top: () -> Top,

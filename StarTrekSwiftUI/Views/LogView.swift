@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// an autoscrolling log view
 struct LogView: View {
     @EnvironmentObject var appState: AppState
     

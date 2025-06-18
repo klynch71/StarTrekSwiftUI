@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+///a top banner view that displays free energy, the current location of the enterprise,  the current startdate,
+///and an icon for the current condition of the ship (eg.: green, alert, docked, etc.)
 struct StatusBarView: View {
     @ObservedObject var appState: AppState
     

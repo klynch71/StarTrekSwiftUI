@@ -31,6 +31,7 @@ struct DamageControl {
         if appState.enterprise.damage.isFullyOperational {
             return maybeInduceRandomDamage(system: system)
         }
+                  
         return repairDamage()
     }
         

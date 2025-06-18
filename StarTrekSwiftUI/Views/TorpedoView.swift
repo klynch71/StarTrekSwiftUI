@@ -27,7 +27,6 @@ struct TorpedoTubeView: View {
 }
 
 ///The display for showing how many torpedoes remain, as well as firing a torepedo on a set course
-///
 struct TorpedoView: View {
     @ObservedObject var appState: AppState
     private let commandExecutor: CommandExecutor

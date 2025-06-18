@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// the  central view in the game
 struct MainView: View {
     @EnvironmentObject var appState: AppState
     
@@ -27,8 +28,7 @@ struct MainView: View {
         case .shortRangeSensors:
             if appState.enterprise.damage.isDamaged(.shortRangeScanner) {                DamagedSystemView(message: "Short range sensors have been damaged.")
             } else {
-                ShortRangeSensorView(appState: appState)
-                   
+                ShortRangeSensorView(viewModel: ShortRangeSensorViewModel(appState: appState))
             }
             
         case .longRangeSensors:

@@ -10,6 +10,12 @@ import Foundation
 /// A NavigationEventResolver takes an array of NavigationEvents and makes the appropriate changes to AppSstate
 struct NavigationEventResolver {
     let appState: AppState
+    let formatter: NavigationEventFormatter
+    
+    init(appState: AppState) {
+        self.appState = appState
+        self.formatter = NavigationEventFormatter()
+    }
 
     /// Resolves a single navigation event and returns messages suitable for display.
     ///
@@ -18,7 +24,6 @@ struct NavigationEventResolver {
     func resolve(_ event: NavigationEvent) -> [String] {
         updateAppState(for: event)
         
-        let formatter = NavigationEventFormatter(appState: appState)
         if let message = formatter.message(for: event) {
             return [message]
         }

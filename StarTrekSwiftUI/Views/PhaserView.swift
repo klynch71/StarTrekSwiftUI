@@ -43,9 +43,7 @@ struct PhaserView: View {
         }
     }
     
-    /*
-     fire Phasers
-     */
+    ///fire phasers with the given energy
     func fire (_ energy: Int, appState: AppState) {
         commandExecutor.firePhasers(phaserEnergy: energy)
     }

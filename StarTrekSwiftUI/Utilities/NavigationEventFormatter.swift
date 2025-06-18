@@ -9,7 +9,6 @@ import Foundation
 
 /// Converts a NavigationEvent into a user-friendly display string.
 struct NavigationEventFormatter {
-    let appState: AppState
     
     /// Returns a user-friendly UI message for the given navigation event.
     ///

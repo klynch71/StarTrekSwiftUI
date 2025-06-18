@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-/**
- A view to obtain Course by using a circle which can be clicked or nor dragged
- */
+ /// A view to obtain Course by using a circle which can be clicked or dragged
 struct CoursePicker: View {
     ///the course to be set
     @Binding var course: Course

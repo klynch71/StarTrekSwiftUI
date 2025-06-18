@@ -28,7 +28,9 @@ struct Course: Equatable, Hashable {
         (2 * .pi) / segments
     }
     
-    /// The course direction as it pertains to the segments.
+    /// The course direction represented as a continuous segment index,
+    /// where 1.0 corresponds to 0° and values can range up to `segments + 1`
+    /// with fractional parts representing intermediate angles.
     let segmentDirection: Double
     
     /// The course equivalent in radians
@@ -40,6 +42,28 @@ struct Course: Equatable, Hashable {
     /// Initializes using a segment-based direction.
     /// - Parameter direction: Segment index (1.0 to 8.0). Wraps around and normalizes if out of range.
     init(direction: Double) {
+        self.segmentDirection = Course.normalizeSegmentDirection(direction)
+    }
+    
+    
+    /// Initializes using radians.
+    /// - Parameter radians: Radian angle, normalized and mapped to the nearest segment.
+    init(radians: Double) {
+        self.segmentDirection = Course.radiansToSegmentDirection(radians)
+    }
+    
+    /// Initializes using degrees.
+    /// - Parameter degrees: Degree angle, converted to radians then mapped to a segment.
+    init(degrees: Double) {
+        let radians = degrees * Double.pi / 180
+        self.init(radians: radians)
+    }
+    
+    /// Normalize a continuous segmentDirection value to the range [1.0, segments + 1),
+    /// wrapping values outside this range back into it.
+    /// For example, `segmentDirection` of 9.2 with 8 segments wraps to 2.2.
+    /// - Returns: a normalized segmentDirection
+    static private func normalizeSegmentDirection(_ direction: Double) -> Double {
         var normalizedDirection = direction.truncatingRemainder(dividingBy: (Course.segments + 1))
         if normalizedDirection < 0 {
             normalizedDirection += Course.segments + 1
@@ -47,13 +71,12 @@ struct Course: Equatable, Hashable {
         if normalizedDirection == 0 {
             normalizedDirection = 1.0
         }
-        self.segmentDirection = normalizedDirection
+        
+        return normalizedDirection
     }
     
-    
-    /// Initializes using radians.
-    /// - Parameter radians: Radian angle, normalized and mapped to the nearest segment.
-    init(radians: Double) {
+    /// Convert radians to a continuous segmentDirection in [1.0, segments + 1).
+    static private func radiansToSegmentDirection(_ radians: Double) -> Double {
         let twoPi = 2 * Double.pi
         var result = radians.truncatingRemainder(dividingBy: twoPi)
         
@@ -67,14 +90,7 @@ struct Course: Equatable, Hashable {
         if (value == Course.segments + 1) {
             value = 1.0
         }
-
-        self.segmentDirection = value
-    }
-    
-    /// Initializes using degrees.
-    /// - Parameter degrees: Degree angle, converted to radians then mapped to a segment.
-    init(degrees: Double) {
-        let radians = degrees * Double.pi / 180
-        self.init(radians: radians)
+        
+        return value
     }
 }

@@ -42,6 +42,7 @@ struct DamageControl {
     /// - Parameter system: An optional ship system to damage. If `nil`, a random system is chosen.
     /// - Returns: The damaged `ShipSystem` if damage occurred, otherwise `nil`.
     private func maybeInduceRandomDamage(system: ShipSystem? = nil) -> String? {
+
         // 1 in 7 chance to induce damage; 6 in 7 chance to skip
         if Int.random(in: 0..<7) > 0 {
             return nil

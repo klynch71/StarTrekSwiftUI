@@ -46,6 +46,8 @@ struct ShipStatusService {
         } else {
             appState.updateEnterprise { $0.condition = .green }
         }
+        
+        updateSystemCapabilities()
     }
     
     /// Fully restores energy and munitions to the Enterprise and repair all damage
@@ -92,5 +94,17 @@ struct ShipStatusService {
     /// Determines if the ship is in a low energy state.
     private func isLowEnergy() -> Bool {
         appState.enterprise.totalEnergy < Enterprise.lowEnergy
+    }
+    
+    /// check for disabled systems
+    private func updateSystemCapabilities() {
+        appState.updateEnterprise { enterprise in
+            if enterprise.damage.isDamaged(.engines) {
+                enterprise.warpFactor = 0
+            }
+            if enterprise.damage.isDamaged(.phaserControl) {
+                enterprise.phaserEnergy = 0
+            }
+        }
     }
 }

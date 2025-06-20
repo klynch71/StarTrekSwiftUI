@@ -133,6 +133,8 @@ struct GalaxyLocation: Hashable, Equatable {
         return NavigationData(course: course, distance: distance)
     }
     
+    // MARK: - private
+    
     /// Returns the 1-based quadrant column.
     private func getQuadrantColumn() -> Int {
         return Int(x - 1) / Galaxy.sectorCols + 1

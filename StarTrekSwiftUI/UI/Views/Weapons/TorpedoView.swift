@@ -80,11 +80,18 @@ struct TorpedoView: View {
                     .padding(.vertical)
             }
         }
+        .disabled(isDamaged())
     }
     
     // fire a photon torpedo at the given course
     func fireTorpedo(at course: Course) {
         commandExecutor.fireTorpedo(at: course)
+    }
+    
+    // return true if torpedoControls are damaged or out of ammo
+    private func isDamaged() -> Bool {
+        return appState.enterprise.torpedoes <= 0 ||
+        appState.enterprise.damage.isDamaged(.torpedoControl)
     }
 }
 

@@ -41,6 +41,7 @@ struct PhaserView: View {
                 .background(Color.red)
                 .padding(.vertical)
         }
+        .disabled(appState.enterprise.damage.isDamaged(.phaserControl))
     }
     
     ///fire phasers with the given energy

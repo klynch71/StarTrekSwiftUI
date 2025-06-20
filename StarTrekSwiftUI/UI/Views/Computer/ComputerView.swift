@@ -57,7 +57,7 @@ struct ComputerView: View {
                     title: "Calculator",
                     icon: "Distance",
                     view: AnyView(
-                        MetricCalculatorView()
+                        MetricCalculatorView(viewModel: ShortRangeSensorViewModel(appState: appState))
                     )
                 ),
                 (

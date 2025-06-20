@@ -35,6 +35,7 @@ struct ShieldView: View {
                 competingDrains: { [appState.enterprise.phaserEnergy] },
                 label: "Shields"
             )
+            .disabled(appState.enterprise.damage.isDamaged(.phaserControl))
         }
     }
 }

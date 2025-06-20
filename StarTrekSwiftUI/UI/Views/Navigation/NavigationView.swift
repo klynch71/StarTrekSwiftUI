@@ -76,6 +76,7 @@ struct NavigationView: View {
                 Button("Engage", action: engage)
                     .padding(.vertical)
             }
+            .disabled(appState.enterprise.damage.isDamaged(.engines))
         }
     }
     

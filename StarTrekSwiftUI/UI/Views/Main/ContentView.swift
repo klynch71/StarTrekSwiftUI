@@ -10,7 +10,6 @@ import SwiftUI
 ///Window to display in the main viewing area.
 enum MainScreen {
     case initial
-    case navigation
     case shortRangeSensors
     case longRangeSensors
     case damageReport

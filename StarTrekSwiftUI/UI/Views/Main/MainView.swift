@@ -18,13 +18,6 @@ struct MainView: View {
         case .initial:
             InitialView()
             
-        case .navigation:
-            if appState.enterprise.damage.isDamaged(.engines) {
-                DamagedSystemView(message: "Warp engines are damaged.")
-            } else {
-                NavigationView(appState: appState)
-            }
-            
         case .shortRangeSensors:
             if appState.enterprise.damage.isDamaged(.shortRangeScanner) {                DamagedSystemView(message: "Short range sensors have been damaged.")
             } else {

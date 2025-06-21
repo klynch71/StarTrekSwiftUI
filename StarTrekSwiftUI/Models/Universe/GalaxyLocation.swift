@@ -11,7 +11,7 @@ import Foundation
  /// A location within the Galaxy.  All coordinates in a GalaxyLocation are 1-based.
  /// A GalaxyLocation can use three coordinate Systems:
  ///   1) A flat (x,y) where the Galaxy is laid out in a giant grid.
- ///   2) A location where the Galaxy is laid out in terms of Quadrants (X,Y) that contain Sectors (X,Y).  Sector(X,Y) is relative to the Quadrant.
+ ///   2) A location where the Galaxy is laid out in terms of Quadrants (X,Y) that contain Sectors (X,Y).  Sector(X,Y) is relative to the Quadrant and begins at (1, 1) in the upper left corner.
  ///   3) A layout similar to 2) above, but Sectors are not relative to their Quadrant and have their own unique id.
 struct GalaxyLocation: Hashable, Equatable {
     /// The global (x,y) coordinates in the Galaxy.

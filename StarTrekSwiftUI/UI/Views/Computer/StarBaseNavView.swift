@@ -22,14 +22,14 @@ struct StarbaseNavView: View {
             //directions to Starbase
             VStack(alignment: .leading) {
                 ForEach (Starbases) { Starbase in
-                    let pos = Starbase.location
                     let navData = appState.enterprise.location.navigate(to: Starbase.location)
-                    let strDirection = String(format: "%1.f", navData.course.degrees)
+                    let strLocation = LocationFormatter.localSector(Starbase.location)
+                    let strDirection = String(format: "%1.f°", navData.course.degrees)
                     let strDistance = String(format: "%1.f", navData.distance)
                         
-                    Text("Starbase in sector: (\(pos.sX), \(pos.sY))")
-                    Text("course: \(strDirection)")
-                    Text("distance: \(strDistance)")
+                    Text("Starbase in sector: \(strLocation)")
+                    Text("  course: \(strDirection)")
+                    Text("  distance: \(strDistance)")
                 }
                 
                 if Starbases.count == 0 {

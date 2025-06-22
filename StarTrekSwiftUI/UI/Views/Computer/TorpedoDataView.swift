@@ -39,13 +39,11 @@ struct TorpedoDataView: View {
     /// Returns a formatted targeting string for a Klingon.
     /// Includes sector coordinates, course (degrees), and distance.
     func enemyWarning(_ enemy: any Locatable) -> String {
-        let pos = enemy.location
-  
         let course = appState.enterprise.location.course(to: enemy.location)
         let distance = appState.enterprise.location.distance(to: enemy.location)
         
-        let strSector = "(\(pos.sX),\(pos.sY))"
-        let strCourse = String(format: "%.1f", course.degrees)
+        let strSector = LocationFormatter.localSector(enemy.location)
+        let strCourse = String(format: "%.1f°", course.degrees)
         let strDistance = String(format: "%.1f", distance)
         
         return "Klingon at sector \(strSector), course: \(strCourse), distance: \(strDistance)"

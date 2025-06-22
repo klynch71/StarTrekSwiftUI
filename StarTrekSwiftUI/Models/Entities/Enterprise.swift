@@ -50,6 +50,11 @@ struct Enterprise: Observable, Locatable {
     var damage = ShipSystemDamage() //track system damage
     var exploredSpace = Set<Quadrant>()  //quadrants that have been explored
     
+    /// True if the enterprise is currently docked at a starBase.
+    var isDocked: Bool {
+        return condition == .docked
+    }
+    
     // MARK: - Energy & Weapons
     
     /// Total energy including shields and weapons.
@@ -78,6 +83,7 @@ struct Enterprise: Observable, Locatable {
     var navigationCourse: Course = Course(degrees: 0)
     var torpedoCourse: Course = Course(degrees: 0)
     
+    
     // MARK: - Locatable
     
     /// Display name of the ship.
@@ -100,9 +106,5 @@ struct Enterprise: Observable, Locatable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
-    }
-    
-    func refit() {
-        
     }
 }

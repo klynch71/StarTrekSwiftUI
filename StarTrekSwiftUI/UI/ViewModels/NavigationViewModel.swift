@@ -39,33 +39,29 @@ struct NavigationViewModel {
     /// Moves the Enterprise using the current course and warp factor.
     /// May trigger combat if the Enterprise remains in the same quadrant.
     ///
-    /// - Returns: An array of log messages resulting from the move and any ensuing combat.
-    func engageWarpEngines() -> [String] {
+    func engageWarpEngines() {
         
         let oldQuadrant = appState.enterprise.location.quadrant
         
-        let navigationMessages = resolveNavigation()
+        resolveNavigation()
         
         // If still in the same quadrant, trigger potential Klingon combat.
         let newQuadrant = appState.enterprise.location.quadrant //after resolving move
-        let combatMessages = (oldQuadrant == newQuadrant) ? resolveCombat() : []
-        
-        return navigationMessages + combatMessages
+        if (oldQuadrant == newQuadrant) {
+            resolveCombat()
+        }
     }
     
     /// Evaluates and applies navigation logic, such as movement and boundary handling.
-    /// - Returns: Log messages related to navigation events.
-    private func resolveNavigation() -> [String] {
+    private func resolveNavigation()  {
         let event = NavigationEvaluator(appState: appState).evaluateMove()
-        return  NavigationEventResolver(appState: appState).resolve(event)
+        NavigationEventResolver(appState: appState).resolve(event)
     }
     
     /// Resolves post-movement Klingon attacks, if applicable.
     /// - Returns: Formatted combat log messages.
-    private func resolveCombat() -> [String] {
+    private func resolveCombat() {
         let combatEvents = CombatEvaluator(appState: appState).klingonsAttack()
         let resolvedEvents = CombatResolver(appState: appState).resolve(combatEvents)
-        let combatFormatter = CombatEventFormatter()
-        return resolvedEvents.map { combatFormatter.message(for: $0) }
     }
 }

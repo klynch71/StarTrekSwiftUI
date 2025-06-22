@@ -19,27 +19,16 @@ struct ShipStatusService {
     /// Updates the ship's condition based on current location, sensor status, nearby threats, and energy.
     func setShipConditions() {
         updateExploredSpace()
-        
-        if canDock() {
-            dockAndRefit()
-        }
-        
-        //if docking location, then dock, lower shields, repair damage, and refit the Enterprise
-        if appState.adjacentStarbases(to: appState.enterprise.location).count > 0 {
-            appState.updateEnterprise {$0.condition = .docked}
-            appState.updateEnterprise {$0.shieldEnergy = 0}
-            appState.updateEnterprise {$0.damage.repairAll()}
-            refit()
-            return
-        }
-        
+
         //if we haven't explored the quadrant we are in, conditions are .green as far as we know
         guard appState.enterprise.exploredSpace.contains(appState.enterprise.location.quadrant) else {
             appState.updateEnterprise { $0.condition = .green }
             return
         }
         
-        if isThreatDetected() {
+        if !appState.enterprise.isDocked && canDock() {
+            dockAndRefit()
+        } else if isThreatDetected() {
             appState.updateEnterprise { $0.condition = .alert }
         } else if isLowEnergy() {
             appState.updateEnterprise { $0.condition = .caution }
@@ -50,17 +39,20 @@ struct ShipStatusService {
         updateSystemCapabilities()
     }
     
-    /// Fully restores energy and munitions to the Enterprise and repair all damage
+    /// Fully restores energy and munitions to the Enterprise
     func refit() {
-        appState.updateEnterprise {$0.totalEnergy = Enterprise.maxEnergy}
-        appState.updateEnterprise {$0.shieldEnergy = 0}
-        appState.updateEnterprise {$0.phaserEnergy = 0}
-        appState.updateEnterprise { $0.damage.repairAll() }
+        appState.updateEnterprise { enterprise in
+            enterprise.totalEnergy = Enterprise.maxEnergy
+            enterprise.shieldEnergy = 0
+            enterprise.phaserEnergy = 0
+            enterprise.torpedoes = Enterprise.torpedoCapacity
+        }
     }
     
     /// Sets the ship's condition to docked, refills energy and resources, and repairs damage.
     private func dockAndRefit() {
         appState.updateEnterprise { $0.condition = .docked }
+        DamageControl(appState: appState).repairAll()
         refit()
     }
     

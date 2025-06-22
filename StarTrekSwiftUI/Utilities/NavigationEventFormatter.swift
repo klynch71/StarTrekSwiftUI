@@ -14,7 +14,7 @@ struct NavigationEventFormatter {
     ///
     /// - Parameter event: The `NavigationEvent` to format.
     /// - Returns: A UI display string describing the event, or `nil` if no message is needed.
-    func message(for event: NavigationEvent) -> String? {
+    static func message(for event: NavigationEvent) -> String? {
         
         switch event {
         case .enginesDamaged:
@@ -41,7 +41,7 @@ struct NavigationEventFormatter {
     /// Returns a collision message based on the collided object.
     /// - Parameter object: The `GalaxyObject` that was collided with.
     /// - Returns: A UI string describing the collision.
-    private func collisionMessage(for object: any Locatable) -> String {
+    static private func collisionMessage(for object: any Locatable) -> String {
         let sector = LocationFormatter.localSector(object.location)
 
         switch object {

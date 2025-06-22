@@ -33,7 +33,7 @@ struct ContentView: View {
                     VerticalSplitView(topHeightRatio: 0.75) {
                         MainView(selection: activeMainScreen)
                     } bottom: {
-                        LogView()
+                        LogView(appState: appState)
                     }
                     ShieldView(appState: appState)
                         .padding(.bottom, 60)

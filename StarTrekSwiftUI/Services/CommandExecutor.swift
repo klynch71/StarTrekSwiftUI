@@ -38,8 +38,7 @@ struct CommandExecutor {
     
     /// Move the Enterprise at current course and speed
     func navigate() {
-        let messages = navigationViewModel.engageWarpEngines()
-        appState.log.append(contentsOf: messages)
+        navigationViewModel.engageWarpEngines()
         applyStandardPostCommandEffects()
     }
     
@@ -69,15 +68,13 @@ struct CommandExecutor {
     
     /// Fire phasers at all enemies in the quadrant. Enemies that survive will fire back.
     func firePhasers(phaserEnergy: Int) {
-        let messages = combatViewModel.firePhasers(phaserEnergy: phaserEnergy)
-        appState.log.append(contentsOf: messages)
+        combatViewModel.firePhasers(phaserEnergy: phaserEnergy)
         applyStandardPostCommandEffects()
     }
     
     /// Fire a phton torepedo on the given course. Enemies that survive will fire back.
     func fireTorpedo(at course: Course) {
-        let messages = combatViewModel.fireTorpedo(at: course)
-        appState.log.append(contentsOf: messages)
+        combatViewModel.fireTorpedo(at: course)
         applyStandardPostCommandEffects()
     }
     
@@ -96,9 +93,7 @@ struct CommandExecutor {
         //There is a time penalty for using a command while docked
         timeService.advanceIfDocked()
 
-        if let message = damageControl.handleDamageOrRepair(system: system) {
-            appState.log.append(message)
-        }
+        damageControl.handleDamageOrRepair(system: system) 
         
         if !sensorsOn {
             appState.updateEnterprise {$0.sensorStatus = .allOff}

@@ -38,7 +38,7 @@ struct GameOverView: View {
             }
 
         } bottom: {
-            LogView()
+            LogView(appState: appState)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

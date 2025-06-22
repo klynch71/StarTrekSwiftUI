@@ -21,7 +21,7 @@ struct ShortRangeSensorView: View {
                  ) { row, col in
                      ObjectCellView(object: viewModel.objectAt(row: row, col: col))
                          .onTapGesture {viewModel.handleTap(row: row, col: col)
-                         }
+                    }
                  }
     }
 }

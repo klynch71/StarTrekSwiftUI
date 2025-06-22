@@ -11,19 +11,17 @@ import Foundation
 struct CombatResolver {
     let appState: AppState
     
-    /// Processes an array of UnresolvedCombatEvents by updating AppState and returning user-facing messages.
+    /// Processes an array of UnresolvedCombatEvents by updating AppState and
+    /// publishing the event to notify any interested subscribers.
     ///
     /// - Parameter events: Array of UnresolvedCombatEvents to resolve.
-    /// - Returns: Array of ResolvedCombatEvents
-    func resolve(_ events: [UnresolvedCombatEvent]) -> [CombatEvent] {
-        var resolvedEvents: [CombatEvent] = []
-        
+    func resolve(_ events: [UnresolvedCombatEvent]) {
+
         for event in events {
             let resolvedEvent = updateAppState(for: event)
-            resolvedEvents.append(resolvedEvent)
+            
+            GameEventBus.shared.combatPublisher.send(resolvedEvent)
         }
-        
-        return resolvedEvents
     }
     
     /// Updates the game state according to a single UnresolvedCombatEvent.

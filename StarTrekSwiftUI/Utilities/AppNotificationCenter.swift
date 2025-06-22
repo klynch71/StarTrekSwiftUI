@@ -17,7 +17,7 @@ class AppNotificationCenter {
     // MARK: - Notification Names
     enum Name {
         static let quadrantDataDidChange = Notification.Name("quadrantDataDidChange")
-        // Add more notifications here as needed
+        
     }
 
     // MARK: - Posting

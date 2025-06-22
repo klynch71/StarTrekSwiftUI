@@ -7,18 +7,19 @@
 
 import SwiftUI
 
-///Displays a Galaxy object or a black empty View if there is no boject
+///Displays a Galaxy object or a black empty View if there is no object
 struct ObjectCellView: View {
     let object: (any Locatable)?
     
     var body: some View {
         
         ZStack {
+            // black background
             Rectangle()
                 .fill(Color.clear)
                 .background(Color.black)
             
-            //show image for galaxy object if we have one
+            // show image for galaxy object if we have one
             if let object = self.object {
                 Image(object.name)
                     .resizable()

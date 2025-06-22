@@ -56,6 +56,11 @@ final class AppState: ObservableObject {
         GameSetup.reset(self)
     }
     
+    /// add a message to the log
+    func addLogEntry(_ message: String) {
+        log.append(message)
+    }
+    
     /// Update a particular value for the enterprise.
     /// Usage: updateEnterprise { $0.totalEnergy = newEnergy}
     ///  Parameter - and enclosure updating an enterprise parameter

@@ -14,7 +14,7 @@ struct CombatEventFormatter {
     ///
     /// - Parameter event: The `CombatEvent` to format.
     /// - Returns: A `String` message describing the event outcome for the UI.
-    func message(for event: CombatEvent) -> String {
+    static func message(for event: CombatEvent) -> String {
         let targetName = event.target?.name ?? "Unknown target"
         let targetLocation = event.target.map { LocationFormatter.localSector($0.location) } ?? ""
         

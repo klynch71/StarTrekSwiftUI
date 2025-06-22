@@ -15,14 +15,12 @@ struct CombatViewModel {
     let appState: AppState
     let combatEvaluator: CombatEvaluator
     let combatResolver: CombatResolver
-    let combatFormatter: CombatEventFormatter
     
     /// Initializes the combat system with dependencies tied to the current game state.
     init(appState: AppState) {
         self.appState = appState
         self.combatEvaluator = CombatEvaluator(appState: appState)
         self.combatResolver = CombatResolver(appState: appState)
-        self.combatFormatter = CombatEventFormatter()
     }
     
     /// Fires phasers at all enemy ships in the current quadrant.
@@ -31,11 +29,9 @@ struct CombatViewModel {
     /// Any surviving enemies may retaliate as part of the resolved combat events.
     ///
     /// - Parameter phaserEnergy: The total energy allocated to the phaser attack.
-    /// - Returns: An array of log messages describing the results of the attack and retaliation.
-    func firePhasers(phaserEnergy: Int) -> [String] {
+    func firePhasers(phaserEnergy: Int) {
         let combatEvents = combatEvaluator.firePhasers(phaserEnergy: phaserEnergy)
-        let resolvedEvents = combatResolver.resolve(combatEvents)
-        return resolvedEvents.map { combatFormatter.message(for: $0) }
+        combatResolver.resolve(combatEvents)
     }
     
     /// Fires a photon torpedo along a specified course.
@@ -44,10 +40,8 @@ struct CombatViewModel {
     /// The outcome (hit, miss, destruction, retaliation) is evaluated and formatted.
     ///
     /// - Parameter course: The directional course to fire the torpedo.
-    /// - Returns: An array of log messages describing the torpedo's effect.
-    func fireTorpedo(at course: Course) -> [String] {
+    func fireTorpedo(at course: Course) {
         let combatEvents = combatEvaluator.fireTorpedo(course: course)
-        let resolvedEvents = combatResolver.resolve(combatEvents)
-        return resolvedEvents.map { combatFormatter.message(for: $0) }
+        combatResolver.resolve(combatEvents)
     }
 }

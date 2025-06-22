@@ -10,24 +10,19 @@ import Foundation
 /// A NavigationEventResolver takes an array of NavigationEvents and makes the appropriate changes to AppSstate
 struct NavigationEventResolver {
     let appState: AppState
-    let formatter: NavigationEventFormatter
     
     init(appState: AppState) {
         self.appState = appState
-        self.formatter = NavigationEventFormatter()
     }
 
-    /// Resolves a single navigation event and returns messages suitable for display.
+    /// Handles a single navigation event by updating the app state accordingly
+    /// and publishing the event to notify any interested subscribers.
     ///
-    /// - Parameter event: The `NavigationEvent` to resolve.
-    /// - Returns: An array of display strings describing the result of the navigation event.
-    func resolve(_ event: NavigationEvent) -> [String] {
+    /// - Parameter event: The `NavigationEvent` instance to process and broadcast.
+    func resolve(_ event: NavigationEvent) {
         updateAppState(for: event)
         
-        if let message = formatter.message(for: event) {
-            return [message]
-        }
-        return []
+        GameEventBus.shared.navigationPublisher.send(event)
     }
     
     /// Updates the AppState based on the NavigationEvent's effects.

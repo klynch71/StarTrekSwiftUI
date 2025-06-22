@@ -75,11 +75,9 @@ struct ComputerView: View {
                 )
             ],
             onTabWillChange: { _ in
-                //every use of the computer induces a change for damage
-                if let message = damageControl.handleDamageOrRepair(system: .computer) {
-                    appState.log.append(message)
-                }
-                })
+                //every use of the computer induces a chance for damage
+                damageControl.handleDamageOrRepair(system: .computer)
+            })
     }
 }
 

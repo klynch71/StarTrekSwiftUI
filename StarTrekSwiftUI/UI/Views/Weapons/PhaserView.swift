@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Provides controls for setting phaser energy and firing phasers.
 struct PhaserView: View {
     @ObservedObject var appState: AppState
     private let commandExecutor: CommandExecutor
@@ -37,7 +38,7 @@ struct PhaserView: View {
             )
         
             //fire button
-            Button("Fire", action: {fire(appState.enterprise.phaserEnergy, appState: appState)})
+            Button("Fire", action: {fire(appState.enterprise.phaserEnergy)})
                 .background(Color.red)
                 .padding(.vertical)
         }
@@ -45,7 +46,7 @@ struct PhaserView: View {
     }
     
     ///fire phasers with the given energy
-    func fire (_ energy: Int, appState: AppState) {
+    func fire (_ energy: Int) {
         commandExecutor.firePhasers(phaserEnergy: energy)
     }
 }

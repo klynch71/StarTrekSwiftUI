@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// provides course and distance to any starBases in the current quadrant.
 struct StarbaseNavView: View {
     @EnvironmentObject var appState: AppState
     

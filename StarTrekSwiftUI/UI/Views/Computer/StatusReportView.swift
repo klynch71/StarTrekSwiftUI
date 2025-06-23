@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// Displays the status of the game in terms of remaining klingons, number of starbases, and remaining
+/// time to complete the mission.
 struct StatusReportView: View {
     @EnvironmentObject var appState: AppState
     

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
- /// Scan adjacent sectors to where the Enterprise is currently located.
+ /// Scan adjacent quadrants to where the Enterprise is currently located.
 struct LongRangeSensorView: View {
     @ObservedObject var appState: AppState
     @State var viewModel: LongRangeSensorViewModel

@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-/*
- A view for moving the Enterprise based on speed and course
- */
+/// A view for moving the Enterprise based on speed and course
 struct NavigationView: View {
     @ObservedObject var appState: AppState
     let commandExecutor: CommandExecutor

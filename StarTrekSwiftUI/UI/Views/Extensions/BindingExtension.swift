@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// An extension to binding to provide value clamping
 extension Binding where Value == Int {
     func clamped(to limit: @escaping () -> Int) -> Binding<Int> {
         Binding<Int>(

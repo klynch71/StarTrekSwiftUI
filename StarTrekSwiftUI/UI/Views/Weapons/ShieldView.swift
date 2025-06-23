@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-///The view for display Shield strength.
+///The view for displaying and setting Shield strength.
 ///
 struct ShieldView: View {
     @ObservedObject var appState: AppState

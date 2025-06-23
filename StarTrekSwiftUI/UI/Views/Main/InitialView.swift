@@ -8,7 +8,6 @@
 import SwiftUI
 
 ///The Initlal game screen
-///
 struct InitialView: View {
     @EnvironmentObject var appState: AppState
     

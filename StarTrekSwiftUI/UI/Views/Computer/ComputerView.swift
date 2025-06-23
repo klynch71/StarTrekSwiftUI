@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// the main computer view with a tab that allows the user to access different computer functions:
+/// GalacticRecord, StatusReport, Torpedo Data, etc.
 struct ComputerView: View {
     let appState: AppState
     let damageControl: DamageControl

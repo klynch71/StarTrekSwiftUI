@@ -61,6 +61,6 @@ struct NavigationViewModel {
     /// - Returns: Formatted combat log messages.
     private func resolveCombat() {
         let combatEvents = CombatEvaluator(appState: appState).klingonsAttack()
-        let resolvedEvents = CombatResolver(appState: appState).resolve(combatEvents)
+        CombatResolver(appState: appState).resolve(combatEvents)
     }
 }

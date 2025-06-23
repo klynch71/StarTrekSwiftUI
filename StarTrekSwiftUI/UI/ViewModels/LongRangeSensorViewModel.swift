@@ -52,8 +52,7 @@ class LongRangeSensorViewModel: ObservableObject {
     
     /// Subscribes to `NavigationEvent publishers via the`GameEventBus`.
     ///
-    /// Each event is passed through its respective formatter, which returns a user-friendly message.
-    /// If a message is returned (i.e. not nil), it is appended to the log.
+    /// Each event is checked to see if we crossed Quadrant boundaries, and if so we reload AdjacentQuadrants
     private func subscribeToEvents() {
         GameEventBus.shared.navigationPublisher
             .sink { [weak self] event in

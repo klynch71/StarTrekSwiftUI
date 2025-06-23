@@ -12,15 +12,23 @@ import Combine
 class ShortRangeSensorViewModel: ObservableObject {
     /// The shared application state, including the enterprise and galaxy data.
     let appState: AppState
+    
+    // The galaxy objects in the enterprise quadrant.
+    @Published var quadrantObjects: [any Locatable] = []
 
     /// Handles the logic for setting course and speed for navigation.
     private let navViewModel: NavigationViewModel
+    
+    /// Used to hold Combine subscriptions and automatically cancel them on deinit.
+    private var cancellables = Set<AnyCancellable>()
 
-    /// Initializes the view model with shared application state.
+    /// Initializes the view model with shared application state and subscribe to combatEvents
     /// - Parameter appState: The global app state used to read and update navigation and galaxy data.
     init(appState: AppState) {
         self.appState = appState
         self.navViewModel = NavigationViewModel(appState: appState)
+        self.loadQuadrantObjects()
+        self.subscribeToEvents()
     }
 
     /// Returns the `Sector` at the specified grid coordinates within the current quadrant.
@@ -48,7 +56,7 @@ class ShortRangeSensorViewModel: ObservableObject {
         }
 
         // Otherwise, find the first other object located in that sector
-        return appState.galaxyObjects.first(where: { $0.location.sector == sector })
+        return quadrantObjects.first(where: { $0.location.sector == sector })
     }
 
     /// Handles a tap gesture on a specific sector. Calculates the navigation course from the current
@@ -63,5 +71,30 @@ class ShortRangeSensorViewModel: ObservableObject {
         let navData = appState.enterprise.location.navigate(to: destination)
 
         navViewModel.setCourseAndSpeed(navData: navData)
+    }
+    
+    /// Subscribes to `CombatEvent publishers via the`GameEventBus`.
+    ///
+    /// Reload the quadrantObjects if a GalaxyObject has been destroyed.
+    private func subscribeToEvents() {
+        GameEventBus.shared.combatPublisher
+            .sink { [weak self] event in
+                self?.handleCombatEvent(event)
+            }
+            .store(in: &cancellables)
+    }
+    
+    /// reload quadrantObjects if a combatEvent results in a destroyed outcome
+    private func handleCombatEvent(_ event: CombatEvent) {
+        switch (event.effect) {
+        case .destroyed:
+            loadQuadrantObjects()
+        default: return
+        }
+    }
+    
+    /// load the galaxy objects in the current Quadrant
+    private func loadQuadrantObjects() {
+        self.quadrantObjects = appState.objects(in: appState.enterprise.location.quadrant)
     }
 }

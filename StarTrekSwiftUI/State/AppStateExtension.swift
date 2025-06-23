@@ -21,8 +21,15 @@ extension AppState {
     ///   - type: The type to filter for.
     ///   - quadrant: The quadrant to search within.
     func objects<T: Locatable>(ofType type: T.Type, in quadrant: Quadrant) -> [T] {
-        let objects = galaxyObjects.filter {$0.location.quadrant == quadrant}
+        let objects = objects(in: quadrant)
         return objects.compactMap { $0 as? T }
+    }
+    
+    /// Returns all galaxy objects  in the given quadrant.
+    /// - Parameters:
+    ///   - quadrant: The quadrant to search within.
+    func objects(in quadrant: Quadrant) -> [any Locatable] {
+        return galaxyObjects.filter {$0.location.quadrant == quadrant}
     }
     
     /// Returns the first object located in the given sector, or `nil` if none exists.

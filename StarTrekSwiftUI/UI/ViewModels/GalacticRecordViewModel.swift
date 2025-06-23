@@ -35,7 +35,7 @@ class GalacticRecordViewModel {
     }
     
     /// Subscribes to `NavigationEvent publishers via the`GameEventBus and calls
-    /// handleNavigationEvent
+    /// handleNavigationEvent to reload adjacentQudrants if the enteprise crossed a Quadrant boundary.
     private func subscribeToEvents() {
         GameEventBus.shared.navigationPublisher
             .sink { [weak self] event in

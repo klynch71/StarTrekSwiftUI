@@ -9,7 +9,7 @@ import Foundation
 
 /// A protocol for any object that occupies a location in the Galaxy.
 ///
-/// Conforming types must be observable and identifiable,
+/// Conforming types must be  identifiable
 /// and provide location tracking and a display name.
 protocol Locatable: Identifiable, Hashable {
     

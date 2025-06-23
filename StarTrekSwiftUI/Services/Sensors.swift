@@ -16,7 +16,6 @@ struct Sensors {
         let currentQuadrant = appState.enterprise.location.quadrant
         appState.updateEnterprise {$0.exploredSpace.insert(currentQuadrant) }
         appState.updateEnterprise {$0.sensorStatus = .shortRangeOn}
-  
     }
     
     /// Activates the long-range sensors for the Enterprise.

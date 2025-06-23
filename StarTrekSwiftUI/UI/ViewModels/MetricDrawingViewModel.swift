@@ -65,7 +65,7 @@ class MetricDrawingViewModel: ObservableObject {
         guard let start = selectedStart, let end = selectedEnd else { return }
 
         let dx = Double(end.col - start.col)
-        let dy = Double(end.row - start.row)
+        let dy = Double(start.row - end.row)  //y inceases downard
 
         // Euclidean distance
         let distance = sqrt(dx * dx + dy * dy)

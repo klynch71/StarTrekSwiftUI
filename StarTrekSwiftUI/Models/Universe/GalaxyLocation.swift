@@ -67,7 +67,7 @@ struct GalaxyLocation: Hashable, Equatable {
         let localX = sectorOffset % Galaxy.sectorCols
         let localY = sectorOffset / Galaxy.sectorCols
         
-        // Determine the Quadrant's position in the 8x8 grid
+        // Determine the Quadrant's position in the grid
         let quadrantX = quadrantIndex % Galaxy.quadrantCols
         let quadrantY = quadrantIndex / Galaxy.quadrantCols
         

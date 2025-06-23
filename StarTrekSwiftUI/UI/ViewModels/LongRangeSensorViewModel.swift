@@ -23,7 +23,7 @@ class LongRangeSensorViewModel: ObservableObject {
         self.appState = appState
         self.navViewModel = NavigationViewModel(appState: appState)
         self.loadAdjacentQuadrants()
-        self.subscribeToQuadrantChanges()
+        self.subscribeToEvents()
     }
     
     /// Return the quadrant at the row, col index or nil if none exists
@@ -49,13 +49,30 @@ class LongRangeSensorViewModel: ObservableObject {
         navViewModel.setCourseAndSpeed(navData: navData)
     }
     
-    ///listen for notifications regarding quadrant changes
-    private func subscribeToQuadrantChanges() {
-        AppNotificationCenter.shared.quadrantDataDidChangePublisher
-            .sink { [weak self] in
-                self?.loadAdjacentQuadrants()
+    /// Subscribes to `NavigationEvent publishers via the`GameEventBus`.
+    ///
+    /// Each event is passed through its respective formatter, which returns a user-friendly message.
+    /// If a message is returned (i.e. not nil), it is appended to the log.
+    private func subscribeToEvents() {
+        GameEventBus.shared.navigationPublisher
+            .sink { [weak self] event in
+                self?.handleNavigationEvent(event)
             }
             .store(in: &cancellables)
+    }
+    
+    /// load adjacent quadrants if we entered a new quadrant
+    private func handleNavigationEvent(_ event: NavigationEvent) {
+        switch event {
+        case .movedSuccessfully(let startLocation, let finalLocation, _),
+             .stoppedAtEdge(let startLocation, let finalLocation, _):
+            if startLocation.quadrant != finalLocation.quadrant {
+                loadAdjacentQuadrants()
+            }
+
+        default:
+            return // otherwise do nothing
+        }
     }
     
     /// Load adjacent quadrants from current enterprise location

@@ -23,9 +23,10 @@ enum NavigationEvent {
     
     /// Movement stopped at the edge of the galaxy — the Enterprise attempted to move beyond galaxy bounds.
     /// - Parameters:
+    ///   - starLocation: The location where the Entrprise started from
     ///   - finalLocation: The furthest valid location the Enterprise reached.
     ///   - energyCost: The energy used to reach the edge.
-    case stoppedAtEdge(finalLocation: GalaxyLocation, energyCost: Int)
+    case stoppedAtEdge(startLocation: GalaxyLocation, finalLocation: GalaxyLocation, energyCost: Int)
     
     /// Movement stopped due to a collision with another object.
     /// - Parameters:
@@ -38,7 +39,7 @@ enum NavigationEvent {
     /// - Parameters:
     ///   - finalLocation: The final destination reached.
     ///   - energyCost: The total energy expended during the move.
-    case movedSuccessfully(finalLocation: GalaxyLocation, energyCost: Int)
+    case movedSuccessfully(startLocation: GalaxyLocation, finalLocation: GalaxyLocation, energyCost: Int)
     
     /// Movement was successful and resulted in docking at a starbase.
     /// - Parameters:

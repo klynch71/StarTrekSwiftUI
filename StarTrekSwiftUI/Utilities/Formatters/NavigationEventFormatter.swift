@@ -20,14 +20,14 @@ struct NavigationEventFormatter {
         case .enginesDamaged:
             return "Engines are damaged.  Repairs are underway."
             
-        case .movedSuccessfully(_, _):
-            // No message needed for successful movement
+        case .movedSuccessfully(_, _, _):
+            // No message needed for successful movement or quadrant change
             return nil
             
         case .insufficientEnergy(_, _):
             return "Insufficient energy to travel at that speed."
             
-        case .stoppedAtEdge(_, _):
+        case .stoppedAtEdge(_, _, _):
             return "The Enterprise must remain within Galaxy boundaries."
             
         case .stoppedByCollision(_, let object, _):

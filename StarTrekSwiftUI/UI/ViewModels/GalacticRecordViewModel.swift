@@ -20,7 +20,7 @@ class GalacticRecordViewModel {
     init(appState: AppState) {
         self.appState = appState
         self.loadExploredQuadrants()
-        self.subscribeToQuadrantChanges()
+        self.subscribeToEvents()
     }
     
     /// Returns the quadrant at the specified position if it has been explored,
@@ -35,13 +35,28 @@ class GalacticRecordViewModel {
         return explored ? quadrant : nil
     }
     
-    ///listen for notifications regarding quadrant changes
-    private func subscribeToQuadrantChanges() {
-        AppNotificationCenter.shared.quadrantDataDidChangePublisher
-            .sink { [weak self] in
-                self?.loadExploredQuadrants()
+    /// Subscribes to `NavigationEvent publishers via the`GameEventBus and calls
+    /// handleNavigationEvent
+    private func subscribeToEvents() {
+        GameEventBus.shared.navigationPublisher
+            .sink { [weak self] event in
+                self?.handleNavigationEvent(event)
             }
             .store(in: &cancellables)
+    }
+    
+    /// load explored quadrants if we entered a new quadrant
+    private func handleNavigationEvent(_ event: NavigationEvent) {
+        switch event {
+        case .movedSuccessfully(let startLocation, let finalLocation, _),
+             .stoppedAtEdge(let startLocation, let finalLocation, _):
+            if startLocation.quadrant != finalLocation.quadrant {
+                loadExploredQuadrants()
+            }
+
+        default:
+            return // otherwise do nothing
+        }
     }
     
     /// Load explored quadrants from the enterprise

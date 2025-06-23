@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Formats a `CombatEvent` into a user-friendly message for display.
+/// Formats a CombatEvent into a user-friendly message for display.
 struct CombatEventFormatter {
     
     /// Generates a formatted message string based on the outcome of a combat event.

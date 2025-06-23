@@ -62,7 +62,7 @@ struct NavigationEvaluator {
             
             //make sure we don't leave the Galaxy
             if GalaxyLocation.inGalaxy(x: Int(x.rounded()), y: Int(y.rounded())) == false {
-                return .stoppedAtEdge(finalLocation: lastLoc, energyCost: requiredEnergy)
+                return .stoppedAtEdge(startLocation: startLoc, finalLocation: lastLoc, energyCost: requiredEnergy)
             }
             
             let newLoc = GalaxyLocation(x: Int(x.rounded()), y: Int(y.rounded()))
@@ -85,6 +85,6 @@ struct NavigationEvaluator {
         }
         
         //successful move to lastLoc
-        return .movedSuccessfully(finalLocation: lastLoc, energyCost: requiredEnergy)
+        return .movedSuccessfully(startLocation: startLoc, finalLocation: lastLoc, energyCost: requiredEnergy)
     }
 }

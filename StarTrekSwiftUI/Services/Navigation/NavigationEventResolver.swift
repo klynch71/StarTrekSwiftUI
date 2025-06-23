@@ -35,14 +35,15 @@ struct NavigationEventResolver {
         let targetWarp = appState.enterprise.warpFactor
         
         switch event {
+
         case .enginesDamaged, .insufficientEnergy(_, _):
             return  //No movement or energy
             
-        case .movedSuccessfully(let newLocation, let energy):
+        case .movedSuccessfully(_, let newLocation, let energy):
             updatedLocation = newLocation
             energyCost = energy
             
-        case .stoppedAtEdge(let edge, let energy),
+        case .stoppedAtEdge(_, let edge, let energy),
              .stoppedByCollision(let edge, _, let energy),
             .dockedAtStarbase(let edge, _, let energy):
                     updatedLocation = edge
@@ -59,7 +60,6 @@ struct NavigationEventResolver {
         let crossedQuadrant = updatedLocation.quadrant != previousLocation.quadrant
         if crossedQuadrant {
             appState.randomizeObjects(in: updatedLocation.quadrant)
-            AppNotificationCenter.shared.postQuadrantDataDidChange()
         }
         
         // Advance time

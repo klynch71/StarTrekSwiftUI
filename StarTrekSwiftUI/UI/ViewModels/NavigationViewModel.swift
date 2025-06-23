@@ -20,7 +20,7 @@ struct NavigationViewModel {
     func setCourseAndSpeed(navData: NavigationData) {
         //computer must be oeprational for auto navigation and targeting
         guard !appState.enterprise.damage.isDamaged(.computer) else {
-            appState.log.append("Computer damaged.  Auto navigation and targeting are unavailable.")
+            appState.log.append(NavigationEventFormatter.autoNaviationDamaged())
             return
         }
         

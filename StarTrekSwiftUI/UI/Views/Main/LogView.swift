@@ -22,7 +22,6 @@ struct LogView: View {
             Color.black
             
            AutoScrollingView(lines: appState.log)
-                .multilineTextAlignment(.center)
                 .font(.system(.body, design: .monospaced))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)

@@ -31,17 +31,6 @@ class ShortRangeSensorViewModel: ObservableObject {
         self.subscribeToEvents()
     }
 
-    /// Returns the `Sector` at the specified grid coordinates within the current quadrant.
-    /// - Parameters:
-    ///   - row: The row index of the grid.
-    ///   - col: The column index of the grid.
-    /// - Returns: The sector if it exists; otherwise, `nil`.
-    func sectorAt(row: Int, col: Int) -> Sector? {
-        let sectors = appState.enterprise.location.quadrant.sectors
-        let index = row * Galaxy.sectorCols + col
-        return sectors[safe: index]
-    }
-
     /// Returns the object (e.g., Enterprise, enemy, or star) located in the specified sector.
     /// - Parameters:
     ///   - row: The row index of the grid.
@@ -73,6 +62,17 @@ class ShortRangeSensorViewModel: ObservableObject {
         navViewModel.setCourseAndSpeed(navData: navData)
     }
     
+    /// Returns the `Sector` at the specified grid coordinates within the current quadrant.
+    /// - Parameters:
+    ///   - row: The row index of the grid.
+    ///   - col: The column index of the grid.
+    /// - Returns: The sector if it exists; otherwise, `nil`.
+    private func sectorAt(row: Int, col: Int) -> Sector? {
+        let sectors = appState.enterprise.location.quadrant.sectors
+        let index = row * Galaxy.sectorCols + col
+        return sectors[safe: index]
+    }
+    
     /// Subscribes to `CombatEvent publishers via the`GameEventBus`.
     ///
     /// Reload the quadrantObjects if a GalaxyObject has been destroyed.
@@ -86,10 +86,8 @@ class ShortRangeSensorViewModel: ObservableObject {
     
     /// reload quadrantObjects if a combatEvent results in a destroyed outcome
     private func handleCombatEvent(_ event: CombatEvent) {
-        switch (event.effect) {
-        case .destroyed:
+        if event.effect == .destroyed {
             loadQuadrantObjects()
-        default: return
         }
     }
     

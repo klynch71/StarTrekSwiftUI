@@ -36,6 +36,11 @@ struct NavigationEventFormatter {
         }
     }
     
+    /// returns a user-friendly UI message for auto-navigation damaged
+    static func autoNaviationDamaged() -> String {
+        return "Computer damaged.  Auto navigation and targeting are unavailable."
+    }
+    
     /// Returns a collision message based on the collided object.
     /// - Parameter object: The `GalaxyObject` that was collided with.
     /// - Returns: A UI string describing the collision.

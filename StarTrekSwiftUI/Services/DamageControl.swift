@@ -42,7 +42,7 @@ struct DamageControl {
     ///
     /// - Parameter system: The system to damage, or `nil` to choose randomly.
     private func maybeInduceRandomDamage(system: ShipSystem? = nil) {
-
+            
         // 1 in 7 chance to induce damage; 6 in 7 chance to skip
         if Int.random(in: 0..<7) > 0 {
             return

@@ -37,7 +37,7 @@ struct CombatEventFormatter {
         case .fired:
             return event.attackType == .phasers
                 ? "Firing phasers..."
-                : "Firing photon torpedoes..."
+                : "Firing photon torpedo..."
             
         /// Torpedo missed its intended target.
         case .missed:

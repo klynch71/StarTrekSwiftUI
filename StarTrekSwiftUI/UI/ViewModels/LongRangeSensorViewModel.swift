@@ -11,6 +11,7 @@ import Combine
 
 /// ViewModel managing quadrant data and navigation logic for the LongRangeSensorView.
 /// Maintains a 3x3 grid of adjacent quadrants and handles tap-based navigation.
+/// Listens for NavigationEvents and updates adjacentQuadrants if the enterprise entered a new Quadrant.
 class LongRangeSensorViewModel: ObservableObject {
     /// Adjacent quadrants surrounding the Enterprise (3x3 grid)
     @Published var adjacentQuadrants: [Quadrant?] = []

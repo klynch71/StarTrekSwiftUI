@@ -16,6 +16,7 @@ enum MainScreen {
     case computer
 }
 
+/// The application view that contains all other views.
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
     @State var activeMainScreen: MainScreen = .initial

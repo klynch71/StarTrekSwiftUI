@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/13/25.
 //
 
-import Foundation
-
 /// A service responsible for advancing in-game time based on navigation events.
 struct TimeService {
     let appState: AppState

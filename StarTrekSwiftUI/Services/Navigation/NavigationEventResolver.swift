@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/11/25.
 //
 
-import Foundation
-
 /// A NavigationEventResolver takes an array of NavigationEvents and makes the appropriate changes to AppSstate
 struct NavigationEventResolver {
     let appState: AppState

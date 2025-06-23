@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/10/25.
 //
 
-import Foundation
-
 /// Represents the result of an attempted navigation or movement action by the Enterprise.
 ///
 /// Each case captures a specific outcome, along with any relevant data such as the final location or energy cost.

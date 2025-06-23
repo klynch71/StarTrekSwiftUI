@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/11/25.
 //
 
-import Foundation
-
 /// Resolves UnresolvedCombatEvents by updating the AppState accordingly.
 struct CombatResolver {
     let appState: AppState

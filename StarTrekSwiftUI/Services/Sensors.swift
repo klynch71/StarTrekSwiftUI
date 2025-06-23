@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/11/25.
 //
 
-import Foundation
-
 /// Sensors represent the short-range and long-range sensor systems aboard the Enterprise.
 struct Sensors {
     let appState: AppState

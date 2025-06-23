@@ -31,7 +31,7 @@ struct ConditionView: View {
     }
     
     /// Returns the appropriate image name based on the current ship condition.
-    func imageName() -> String {
+    private func imageName() -> String {
         switch model.enterprise.condition {
         case .docked: return "Docked"
         case .alert: return "RedAlert"

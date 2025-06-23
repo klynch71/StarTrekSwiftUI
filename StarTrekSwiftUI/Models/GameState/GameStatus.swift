@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/13/25.
 //
 
-import Foundation
-
 /// Represents the current status of the game, including whether it is ongoing,
 /// won, or lost for various reasons.
 enum GameStatus: Equatable {

@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 5/27/25.
 //
 
-import Foundation
-
 /// Represents a course (segmentDirection) in a 360° circle.
 /// The circle is divided into `segments` equal parts. A course is defined by a segment-based
 /// index from `1.0` (representing 0°) to `segments + 1` (which wraps back to 0°/1.0 again).

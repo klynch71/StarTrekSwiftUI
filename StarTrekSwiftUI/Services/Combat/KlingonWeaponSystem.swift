@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/11/25.
 //
 
-import Foundation
-
 /// A WeaponSystem representing the phaser attack capabilities of a Klingon ship.
 struct KlingonWeaponSystem: WeaponSystem {
     var appState: AppState

@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/9/25.
 //
 
-import Foundation
-
 /// Formats a CombatEvent into a user-friendly message for display.
 struct CombatEventFormatter {
     
@@ -59,7 +57,7 @@ struct CombatEventFormatter {
         case .hit:
             if let enterprise = event.target as? Enterprise {
                 // Hit on the Enterprise itself
-                return "Enterprise hit by ship at (\(event.attacker.location.sX),\(event.attacker.location.sY)). Shields now at \(String(enterprise.shieldEnergy))."
+                return "Enterprise hit by ship at \(LocationFormatter.localSector(event.attacker.location)). Shields now at \(String(enterprise.shieldEnergy))."
             } else {
                 // Hit on a non-Enterprise target (e.g., Klingon)
                 if let klingon = event.target as? Klingon {

@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/22/25.
 //
 
-import Foundation
-
 /// Formats `DamageEvent` values into user-friendly UI strings.
 struct DamageEventFormatter {
     

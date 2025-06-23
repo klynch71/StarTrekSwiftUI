@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// a view that shows why the game is over (e.g. loss due to being destroyed or ran out of time, won, etc)
 struct GameOverView: View {
     @EnvironmentObject var appState: AppState
     private var imageName: String {

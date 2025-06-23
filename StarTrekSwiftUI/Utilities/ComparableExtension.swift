@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/18/25.
 //
 
-import Foundation
-
 /// Returns the value clamped to the given closed range.
 /// If the value is less than the lower bound, the lower bound is returned.
 /// If the value is greater than the upper bound, the upper bound is returned.

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 /// A protocol for any object that occupies a location in the Galaxy.
 ///

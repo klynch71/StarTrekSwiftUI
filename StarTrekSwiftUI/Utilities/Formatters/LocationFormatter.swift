@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/12/25.
 //
 
-import Foundation
-
 /// Used to format a `GalaxyLocation` into human-readable string representations.
 struct LocationFormatter {
     

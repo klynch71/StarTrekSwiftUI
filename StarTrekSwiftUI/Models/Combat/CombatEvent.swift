@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/17/25.
 //
 
-import Foundation
-
 /// The possible effect of a combat action.
 enum CombatEffect: Equatable {
     case noAmmo                     // No ammunition available

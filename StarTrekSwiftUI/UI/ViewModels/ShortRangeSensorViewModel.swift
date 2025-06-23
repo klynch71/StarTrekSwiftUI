@@ -5,7 +5,6 @@
 //  Created by Kevin Lynch on 6/17/25.
 //
 
-import Foundation
 import Combine
 
 /// A view model that provides data and interaction logic for the `ShortRangeSensorView`.

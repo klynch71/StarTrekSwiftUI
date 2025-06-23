@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// A view that contains buttons to trigger commands such as Short Range Scan, Long Range Scan,
+/// Damage Report, and Computer
 struct CommandView: View {
     @EnvironmentObject var appState: AppState
     @Binding var selection: MainScreen
@@ -28,9 +30,9 @@ struct CommandView: View {
             Spacer()
             Button("Long Range Scan", action: {longRangeSensors(appState: appState)})
             Spacer()
-            Button("Damage Report", action: {damageReport()})
+            Button("Damage Report", action: damageReport)
             Spacer()
-            Button("Computer", action: {computer()})
+            Button("Computer", action: computer)
             Spacer()
         }
     }

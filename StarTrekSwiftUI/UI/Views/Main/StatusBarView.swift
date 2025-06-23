@@ -32,8 +32,10 @@ struct StatusBarView: View {
     func location() -> String {
         let loc = appState.enterprise.location
         let name = loc.quadrant.name
+        let strQuadrant = LocationFormatter.quadrant(loc)
+        let strSector = LocationFormatter.localSector(loc)
 
-        return "\(name) (\(loc.qX), \(loc.qY)), Sector: (\(loc.sX), \(loc.sY))"
+        return "\(name) \(strQuadrant), Sector: \(strSector)"
     }
 }
 

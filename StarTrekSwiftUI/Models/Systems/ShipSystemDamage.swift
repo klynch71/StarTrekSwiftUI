@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/11/25.
 //
 
-import Foundation
-
 /// Tracks the damage levels of the ship's key systems.
 struct ShipSystemDamage: Equatable, Hashable {
     

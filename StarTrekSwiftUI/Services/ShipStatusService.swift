@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/13/25.
 //
 
-import Foundation
-
 /// A service responsible for determining and updating the ship's status,
 /// including condition, repairs, docking, and refitting.
 struct ShipStatusService {
@@ -96,6 +94,9 @@ struct ShipStatusService {
             }
             if enterprise.damage.isDamaged(.phaserControl) {
                 enterprise.phaserEnergy = 0
+            }
+            if enterprise.damage.isDamaged(.shieldControl) {
+                enterprise.shieldEnergy = 0
             }
         }
     }

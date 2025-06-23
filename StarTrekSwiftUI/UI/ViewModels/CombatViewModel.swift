@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/5/25.
 //
 
-import Foundation
-
 
 /// The CombatViewModel is responsible for coordinating combat actions
 /// including phaser attacks and photon torpedo launches. It delegates evaluation,

@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/11/25.
 //
 
-import Foundation
-
 ///  A PhaserSystem is a WeaponSystem that fires phasers at all Klingons in the same Quadrant.
 struct PhaserSystem: WeaponSystem {
     var appState: AppState

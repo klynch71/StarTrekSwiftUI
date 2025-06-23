@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/10/25.
 //
 
-import Foundation
-
 /// Converts a NavigationEvent into a user-friendly display string.
 struct NavigationEventFormatter {
     

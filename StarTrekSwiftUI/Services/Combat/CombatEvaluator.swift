@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/9/25.
 //
 
-import Foundation
-
 /// Responsible for handling combat logic between the Enterprise and Klingon ships.
 ///
 /// The `CombatEvaluator` produces `CombatEvent` results but does **not** directly mutate `AppState`.

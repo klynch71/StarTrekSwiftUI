@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/14/25.
 //
 
-import Foundation
-
 /// Responsible for evaluating and updating the current game status
 /// based on win/loss conditions like energy, time, Klingons, and starbases.
 struct GameStatusChecker {

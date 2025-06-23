@@ -5,8 +5,6 @@
 //  Created by Kevin Lynch on 6/21/25.
 //
 
-import Foundation
-
 /// Represents a damage-related event in the game. This may describe a change
 /// to a single ship system or indicate that all systems were repaired.
 enum DamageEvent {

@@ -5,19 +5,19 @@ This is a mac-os implemenation of the 1978 Super Star Trek game but with a Swift
 ## Screenshots
 **Figure 1: Initial Screenshot**
 
-![Initial Screenshot](Screenshots/Initial.jpg)
+![Initial Screenshot](Screenshots/Initial.png)
 
 **Figure 2: Short Range Sensor Screenshot**
 
-![Short Range Sensors Screenshot](Screenshots/ShortRangeSensor.jpg)
+![Short Range Sensors Screenshot](Screenshots/ShortRangeSensor.png)
 
 **Figure 3: Long Range Sensor Screenshot**
 
-![Short Range Sensors Screenshot](Screenshots/LongRangeSensor.jpg)
+![Short Range Sensors Screenshot](Screenshots/LongRangeSensor.png)
 
 **Figure 4: Computer: Metric Calculator Screenshot**
 
-![Computer Metric Calculator Screenshot](Screenshots/MetricCalculator.jpg)
+![Computer Metric Calculator Screenshot](Screenshots/MetricCalculator.png)
 
 
 ## Dependencies

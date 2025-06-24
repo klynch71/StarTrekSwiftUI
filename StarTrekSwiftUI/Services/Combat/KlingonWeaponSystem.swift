@@ -20,10 +20,10 @@ struct KlingonWeaponSystem: WeaponSystem {
     func fire() -> [UnresolvedCombatEvent] {
         //energy delivered is based on distance and some randomness
         let distanceDilution = max(1.0, klingon.location.distance(to: appState.enterprise.location))
-        let impactEnergy = Int((Double(klingon.energy) / distanceDilution) * (2 + Double.random(in: 0..<1)))
+        let impactEnergy = Int((Double(klingon.energy) / distanceDilution) * (2 + Double.random(in: 0..<1, using: &appState.rng)))
         
         //energy depletion for a klingon is divided by between 3 and 4
-        let attackEnergy = max(0, Int(Double(klingon.energy) / (3 + Double.random(in: 0..<1))))
+        let attackEnergy = max(0, Int(Double(klingon.energy) / (3 + Double.random(in: 0..<1, using: &appState.rng))))
         
         //determine results
         var effect = CombatEffect.hit

@@ -24,17 +24,16 @@ struct GameSetup {
     static func reset(_ appState: AppState) {
         appState.galaxyObjects.removeAll()
         appState.gameStatus = .inProgress
-        var rng: any RandomNumberGenerator = SystemRandomNumberGenerator()
         
         // Set the stardate randomly between 2000 and 3900 in increments of 100
-        appState.starDate = Double(Int.random(in: 0...19, using: &rng)*100 + 2000)
+        appState.starDate = Double(Int.random(in: 0...19, using: &appState.rng)*100 + 2000)
         
         // Set the game duration between 40 and 50 starDates
-        let gameDuration = 40 + Int.random(in: 0...10, using: &rng)
+        let gameDuration = 40 + Int.random(in: 0...10, using: &appState.rng)
         appState.endDate = appState.starDate + Double(gameDuration)
         
         // Place the enterprise in a random location within the Galaxy
-        let randomLocation = GalaxyLocation.random()
+        let randomLocation = GalaxyLocation.random(using: &appState.rng)
         appState.updateEnterprise {$0.location = randomLocation}
         
         //refit and repair all damage
@@ -46,13 +45,13 @@ struct GameSetup {
                // Prepare sectors: all but where Enterprise starts
                var availableSectors = quadrant.sectors.filter { $0 != appState.enterprise.location.sector }
 
-               placeKlingons(in: quadrant, excluding: &availableSectors, into: &appState.galaxyObjects, rng: &rng)
-               placeStars(in: quadrant, excluding: &availableSectors, into: &appState.galaxyObjects, rng: &rng)
-               placeStarbases(in: quadrant, excluding: &availableSectors, into: &appState.galaxyObjects, rng: &rng)
+               placeKlingons(in: quadrant, excluding: &availableSectors, into: &appState.galaxyObjects, rng: &appState.rng)
+               placeStars(in: quadrant, excluding: &availableSectors, into: &appState.galaxyObjects, rng: &appState.rng)
+               placeStarbases(in: quadrant, excluding: &availableSectors, into: &appState.galaxyObjects, rng: &appState.rng)
            }
         
         // Ensure at least one Starbase exists in the galaxy
-        ensureAtLeastOneStarbase(in: appState, using: &rng)
+        ensureAtLeastOneStarbase(in: appState, using: &appState.rng)
         
         // Initialize the ship conditions
         let shipStatusService = ShipStatusService(appState: appState)

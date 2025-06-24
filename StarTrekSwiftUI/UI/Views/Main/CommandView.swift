@@ -26,15 +26,18 @@ struct CommandView: View {
     var body: some View {
         HStack {
             Spacer()
-            Button("Short Range Scan", action: shortRangeSensors)
+            Button(action: shortRangeSensors)
+                {Text("Short Range Scan")}
             Spacer()
-            Button("Long Range Scan", action: {longRangeSensors(appState: appState)})
+            Button(action: {longRangeSensors(appState: appState)})
+                {Text("Long Range Scan")}
             Spacer()
-            Button("Damage Report", action: damageReport)
+            Button(action: damageReport)
+                {Text("Damage Report")}
             Spacer()
-            Button("Computer", action: computer)
+            Button(action: computer) {Text("Computer")}
             Spacer()
-        }
+        }.padding(.top, 6)
     }
     
     //Show the short range sensors view

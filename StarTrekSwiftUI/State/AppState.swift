@@ -42,10 +42,16 @@ final class AppState: ObservableObject {
     /// Log of notable game events for display to the player.
     @Published var log: [String] = []
     
+    // MARK: - randomness
+    
+    /// used for randomness thorugh the game
+    var rng: any RandomNumberGenerator
+    
     // MARK: - Initialization
 
     /// Initializes the game state and sets up the galaxy and initial conditions.
     init() {
+        self.rng = SystemRandomNumberGenerator()
         self.resetGame()
     }
     

@@ -77,15 +77,22 @@ struct GalaxyLocation: Hashable, Equatable {
         
         self.init(x: globalX, y: globalY)
     }
-        
-    /// Returns a random valid GalaxyLocation.
+    
+    /// Returns a random valid GalaxyLocation using the system RNG.
     /// - Returns: A location within the bounds of the Galaxy.
     static func random() -> GalaxyLocation {
+        var rng: any RandomNumberGenerator = SystemRandomNumberGenerator()
+        return random(using: &rng)
+    }
+        
+    /// Returns a random valid GalaxyLocation using a custom RNG.
+    /// - Returns: A location within the bounds of the Galaxy.
+    static func random(using rng: inout RandomNumberGenerator) -> GalaxyLocation {
         let maxX = Galaxy.quadrantCols * Galaxy.sectorCols
         let maxY = Galaxy.quadrantRows * Galaxy.sectorRows
         
-        let x = Int.random(in:1...maxX)
-        let y = Int.random(in:1...maxY)
+        let x = Int.random(in:1...maxX, using: &rng)
+        let y = Int.random(in:1...maxY, using: &rng)
   
         return GalaxyLocation(x: x, y: y)
     }

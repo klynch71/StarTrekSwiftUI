@@ -45,7 +45,7 @@ struct PhaserSystem: WeaponSystem {
             let distance = appState.enterprise.location.distance(to: klingon.location)
             
             // Calculate damage with distance falloff and some randomness
-            let impactEnergy = Int((Double(energyPerEnemy) / distance) * (2 + Double.random(in: 0..<1)))
+            let impactEnergy = Int((Double(energyPerEnemy) / distance) * (2 + Double.random(in: 0..<1, using: &appState.rng)))
             let newEnergy = klingon.energy - impactEnergy
             
             // Determine hypothetical outcome based on current Klingon energy

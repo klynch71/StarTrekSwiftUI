@@ -42,18 +42,18 @@ struct DamageControl {
     private func maybeInduceRandomDamage(system: ShipSystem? = nil) {
             
         // 1 in 7 chance to induce damage; 6 in 7 chance to skip
-        if Int.random(in: 0..<7) > 0 {
+        if Int.random(in: 0..<7, using: &appState.rng) > 0 {
             return
         }
         
         // Choose the system to damage: provided or random
-        guard let actualSystem = system ?? ShipSystem.allCases.randomElement() else {
+        guard let actualSystem = system ?? ShipSystem.allCases.randomElement(using: &appState.rng) else {
             return
         }
         
         // Induce damage between 1 and 5 points on the selected system
         let oldDamage = appState.enterprise.damage[actualSystem]
-        let additionalDamage = 1 + Int.random(in: 0..<5)
+        let additionalDamage = 1 + Int.random(in: 0..<5, using: &appState.rng)
 
         // Apply the damage
         appState.updateEnterprise {

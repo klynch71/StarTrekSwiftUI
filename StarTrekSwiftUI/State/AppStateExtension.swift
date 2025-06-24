@@ -112,7 +112,7 @@ extension AppState {
         // Loop with index so we can mutate directly since we are storing structs
         for i in galaxyObjects.indices {
             if galaxyObjects[i].location.quadrant == quadrant {
-                guard let randomSector = sectors.randomElement() else { continue }
+                guard let randomSector = sectors.randomElement(using: &rng) else { continue }
                 sectors.removeAll { $0 == randomSector }
                 let newLocation = GalaxyLocation(sector: randomSector)
                 galaxyObjects[i] = galaxyObjects[i].withLocation(newLocation)

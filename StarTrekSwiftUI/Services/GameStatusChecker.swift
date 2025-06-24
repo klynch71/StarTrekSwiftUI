@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/14/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Responsible for evaluating and updating the current game status
 /// based on win/loss conditions like energy, time, Klingons, and starbases.

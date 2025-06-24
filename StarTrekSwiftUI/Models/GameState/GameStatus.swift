@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/13/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Represents the current status of the game, including whether it is ongoing,
 /// won, or lost for various reasons.

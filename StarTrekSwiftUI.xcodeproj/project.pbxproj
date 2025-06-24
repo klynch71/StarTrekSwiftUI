@@ -27,6 +27,7 @@
 		90E7A2312DCFF34300EB0243 /* StarTrekSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StarTrekSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90E7A2422DCFF34400EB0243 /* StarTrekSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StarTrekSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		90E7A24C2DCFF34500EB0243 /* StarTrekSwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StarTrekSwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		90EE23612E0ADA5C00F6E02E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +76,7 @@
 		90E7A2282DCFF34300EB0243 = {
 			isa = PBXGroup;
 			children = (
+				90EE23612E0ADA5C00F6E02E /* README.md */,
 				90E7A2332DCFF34300EB0243 /* StarTrekSwiftUI */,
 				90E7A2452DCFF34400EB0243 /* StarTrekSwiftUITests */,
 				90E7A24F2DCFF34500EB0243 /* StarTrekSwiftUIUITests */,

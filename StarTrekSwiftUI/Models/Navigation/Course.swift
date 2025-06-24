@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 5/27/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Represents a course (segmentDirection) in a 360° circle.
 /// The circle is divided into `segments` equal parts. A course is defined by a segment-based

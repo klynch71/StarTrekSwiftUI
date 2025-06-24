@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/11/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Sensors represent the short-range and long-range sensor systems aboard the Enterprise.
 struct Sensors {

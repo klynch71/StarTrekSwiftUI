@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/11/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 ///  A PhaserSystem is a WeaponSystem that fires phasers at all Klingons in the same Quadrant.
 struct PhaserSystem: WeaponSystem {

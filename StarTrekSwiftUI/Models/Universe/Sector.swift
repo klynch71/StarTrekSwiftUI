@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 5/13/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Represents a unique location (sector) within a quadrant of the galaxy grid.
 /// Each `Sector` is uniquely identified by an integer ID. The galaxy is divided into quadrants,

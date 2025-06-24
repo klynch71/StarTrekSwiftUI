@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/18/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Returns the value clamped to the given closed range.
 /// If the value is less than the lower bound, the lower bound is returned.

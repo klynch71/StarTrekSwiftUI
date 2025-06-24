@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/21/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Represents a damage-related event in the game. This may describe a change
 /// to a single ship system or indicate that all systems were repaired.

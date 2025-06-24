@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 5/11/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /**
  A Galaxy consists of 16 named StarSystems.

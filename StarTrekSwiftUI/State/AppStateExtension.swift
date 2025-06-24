@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/11/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Extension on AppState providing helper functions for querying and manipulating galaxy objects.
 extension AppState {

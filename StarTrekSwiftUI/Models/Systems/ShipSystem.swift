@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/4/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Represents a system on the ship that can be damaged or repaired.
 enum ShipSystem: CaseIterable, Equatable {

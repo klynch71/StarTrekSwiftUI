@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/13/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// A service responsible for advancing in-game time based on navigation events.
 struct TimeService {

@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/17/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// The possible effect of a combat action.
 enum CombatEffect: Equatable {

@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/11/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Handles damage management for ship systems, including inducing random damage
 /// and performing repairs. All changes are published as `DamageEvent`s.

@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/13/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// A service that centralizes the execution of game commands,
 /// ensuring consistent side effects such as time advancement,

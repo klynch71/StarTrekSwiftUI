@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Lynch on 6/9/25.
 //
+//  Copyright (c) 2025 Kevin Lynch
+//  This file is licensed under the MIT license
+//
 
 /// Responsible for handling combat logic between the Enterprise and Klingon ships.
 ///

@@ -59,11 +59,17 @@ struct GameSetup {
         shipStatusService.setShipConditions()
         
         // Initialize the game log with starting instructions
-        appState.log.removeAll()
         let endDate = appState.starDate + appState.timeRemaining
         let numKlingons = appState.objects(ofType: Klingon.self).count
         let numStarbases = appState.objects(ofType: Starbase.self).count
-        appState.log.append("USS Enterprise, your orders are as follows:\nDestroy the \(numKlingons) Klingon warships which have invaded the Galaxy before they can attack Federation headquarters on stardate \(String(endDate)).  This gives you \(appState.timeRemaining) stardates.  There \(numStarbases > 1 ? "are" : "is") \(numStarbases) Starbase\(numStarbases > 1 ? "s" : "") in the Galaxy for resupplying your ship.")
+        let intro = GameIntroFormatter.missionBriefing(
+            starDateEnd: endDate,
+            timeRemaining: appState.timeRemaining,
+            klingons: numKlingons,
+            starbases: numStarbases
+        )
+        appState.log.removeAll()
+        appState.log.append(intro)
     }
     
     /// Returns a random number of Klingon enemies (0 to 3) for a quadrant based on predefined odds.

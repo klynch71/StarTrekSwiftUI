@@ -49,11 +49,10 @@ public struct CustomTabView: View {
                     Text(self.titles[index])
                         .font(.system(size:12))
                 }
-                .frame(height: 80)
+                .frame(height: 60)
                 .background(Color.gray.opacity(((self.selection == index) || (self.indexHovered == index)) ? 0.3 : 0),
                             in: RoundedRectangle(cornerRadius: 8, style: .continuous))
 
-               // .frame(height: 80)
                 .padding(.horizontal, 0)
                 .foregroundColor(self.selection == index ? colorSelected : colorUnselected)
                 .onHover(perform: { hovering in

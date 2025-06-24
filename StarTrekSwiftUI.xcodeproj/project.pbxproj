@@ -30,6 +30,19 @@
 		90EE23612E0ADA5C00F6E02E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		905272162E0B0C5300D923B5 /* Exceptions for "Screenshots" folder in "StarTrekSwiftUI" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Initial.png,
+				LongRangeSensor.png,
+				MetricCalculator.png,
+				ShortRangeSensor.png,
+			);
+			target = 90E7A2302DCFF34300EB0243 /* StarTrekSwiftUI */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		90E7A2332DCFF34300EB0243 /* StarTrekSwiftUI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -44,6 +57,14 @@
 		90E7A24F2DCFF34500EB0243 /* StarTrekSwiftUIUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = StarTrekSwiftUIUITests;
+			sourceTree = "<group>";
+		};
+		90EE23622E0B0A8400F6E02E /* Screenshots */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				905272162E0B0C5300D923B5 /* Exceptions for "Screenshots" folder in "StarTrekSwiftUI" target */,
+			);
+			path = Screenshots;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -77,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				90EE23612E0ADA5C00F6E02E /* README.md */,
+				90EE23622E0B0A8400F6E02E /* Screenshots */,
 				90E7A2332DCFF34300EB0243 /* StarTrekSwiftUI */,
 				90E7A2452DCFF34400EB0243 /* StarTrekSwiftUITests */,
 				90E7A24F2DCFF34500EB0243 /* StarTrekSwiftUIUITests */,
@@ -111,6 +133,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				90E7A2332DCFF34300EB0243 /* StarTrekSwiftUI */,
+				90EE23622E0B0A8400F6E02E /* Screenshots */,
 			);
 			name = StarTrekSwiftUI;
 			packageProductDependencies = (

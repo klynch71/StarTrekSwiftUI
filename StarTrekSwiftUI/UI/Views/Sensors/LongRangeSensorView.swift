@@ -10,7 +10,7 @@
 
 import SwiftUI
 
- /// Scan adjacent quadrants to where the Enterprise is currently located.
+ /// Scan adjacent quadrants to where the Enterprise is currently located and reveal number of Klingons, StarBases and Stars in each quadrant.
 struct LongRangeSensorView: View {
     @ObservedObject var appState: AppState
     @State var viewModel: LongRangeSensorViewModel

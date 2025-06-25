@@ -38,7 +38,7 @@ struct NavigationView: View {
     /// Initializes the view with the app state and screen binding
     /// - Parameters:
     ///   - appState: The global application state
-    ///   - selection: Binding to the currently selected main screen
+    ///   - commandExecutor: Centralized service that executes commands
     init(appState: AppState) {
         self.appState = appState
         self.commandExecutor = CommandExecutor(appState: appState)
